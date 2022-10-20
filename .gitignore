@@ -1,5 +1,3 @@
 *__pycache__
 *.json
-server.py
 request.py
-run.py
