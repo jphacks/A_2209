@@ -1,6 +1,8 @@
 import React, { useState,useCallback, useEffect,createContext, useContext } from "react";
 import { Loader } from "@googlemaps/js-api-loader"
-
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+import {Button} from '@mui/material';
 
 
 const App:React.FC = () =>{
@@ -79,7 +81,7 @@ const GoogleMaps = (
   const [destiTitle,setDestiTitle] = useState<string>("");
   const [destiPosition,setDestionPosition] = useState<google.maps.LatLng>(new google.maps.LatLng({lat:0,lng:0}))
   const [destiMarker,setDestiMarker] = useState<google.maps.Marker>(new google.maps.Marker)
-  const [showModal,setShowModal] = useState<Boolean>(false)
+  const [showModal,setShowModal] = useState<boolean>(false)
   
   let desti_marker:google.maps.Marker;
 
@@ -110,18 +112,12 @@ const GoogleMaps = (
       setDestionPosition(desti.geometry?.location!);
       setShowModal(true);
       
-      
     })
     
     
     
   },[])
   
-  useEffect(()=>{
-    if (!showModal){return}
-    const p = document.getElementById("ask-desti") as HTMLParagraphElement;
-    p.innerText = destiTitle
-  },[showModal])
   
   useEffect(()=>{
     destiMarker.setMap(null)
@@ -132,6 +128,9 @@ const GoogleMaps = (
         position:destiPosition,
         animation:google.maps.Animation.DROP
       })) 
+      let response = googleMap?.setCenter( destiPosition ) ;
+      console.log(response)
+      googleMap?.setCenter(destiPosition)
 
   },[destiTitle,destiPosition])
 
@@ -148,32 +147,55 @@ const GoogleMaps = (
     animation:google.maps.Animation.DROP})
 
   return (
-    <>
+    <div style={{height:window.innerHeight}}>
+      <Box sx={{
+        width: window.innerWidth,
+        textAlign:"center",
+        height: 60,
+        backgroundColor: 'primary.dark',
+        '&:hover': {
+          backgroundColor: 'primary.main',
+          opacity: [0.9, 0.8, 0.7],
+        },
+      }}>
       <input id="search-box" style={{
         color:'red',
         backgroundColor:"#fff",
         fontFamily: "Roboto",
-        fontSize: "15px",
+        fontSize: "25px",
         fontWeight: "300m",
         marginLeft: "12px",
         padding:" 0 11px 0 13px",
         textOverflow: "ellipsis",
         width: "400px",
+        height:"80%",
+        margin:"0%",
+        marginTop:'4px'
 }}/>
-      <div id='map' style={{height:"1000px"}}/>
-      {
-        (showModal &&
-          <div onClick={()=>{setShowModal(false)}} style={{width:"1000px"}}><p id='ask-desti'></p></div>
-          )
+      </Box>
+      <div id='map' style={{height:window.innerHeight}}/>
+      <Drawer
+      anchor="bottom"
+      open={showModal}
+      onClose={()=>{setShowModal(false)}}
+      onClick={()=>{setShowModal(false)}} 
+      style={{textAlign:"center"}}
+      >
+        <Box style={{margin:"10px"}}>
+          <p>{destiTitle}</p>
+          <Box>
+            <Button variant="outlined" size='large'>出発する</Button>
+          </Box>
+        </Box>
+      </Drawer>
 
-      }
 
       <GoogleMapsContext.Provider value={{
         googleMap:googleMap
       }}>
         {children}
       </GoogleMapsContext.Provider>
-    </>
+    </div>
   )
 
 }
