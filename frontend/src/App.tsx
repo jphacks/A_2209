@@ -147,7 +147,7 @@ const GoogleMaps = (
       return ret;
   }
 
-    function compassHeading(alpha, beta, gamma) {
+    function compassHeading(alpha:any, beta:any, gamma:any) {
       var degtorad = Math.PI / 180; // Degree-to-Radian conversion
 
       var _x = beta ? beta * degtorad : 0; // beta value
@@ -178,12 +178,12 @@ const GoogleMaps = (
       return compassHeading * (180 / Math.PI); // Compass Heading (in degrees)
   }
 
-  function watchHeadingiPhone(event) {
+  function watchHeadingiPhone(event:any) {
     const degrees = 360 - event.webkitCompassHeading;
     ap.setHeading(degrees);
   }
 
-  function watchHeadingAndroid(event) {
+  function watchHeadingAndroid(event:any) {
     const alpha = event.alpha;
     const beta = event.beta;
     const gamma = event.gamma;
@@ -207,15 +207,17 @@ const GoogleMaps = (
     ap.setAudioURL("./music.ogg")
     const watch_position_id = navigator.geolocation.watchPosition(success,error,options);
     ap.setHeading(89)
+    const OS = detectOSSimply();
+
     if(OS == "iphone") {
       // iPhone + Safariの場合はDeviceOrientation APIの使用許可をユーザに求める
       (DeviceOrientationEvent as any).requestPermission()
-          .then(response => {
+          .then((response:any) => {
               if (response === "granted") {
                   window.addEventListener("deviceorientation", watchHeadingiPhone);
               }
           })
-          .catch(err => {console.log(err)});
+          .catch((err:any) => {console.log(err)});
     }else if(OS == "android") {
         window.addEventListener("deviceorientationabsolute", watchHeadingAndroid);
         //window.addEventListener("deviceorientation", watchHeadingAndroid);
