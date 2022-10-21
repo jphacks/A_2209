@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 import pyrebase, json, os
 from firebase_admin import credentials, firestore, initialize_app
+from google.cloud.firestore import GeoPoint
 
 api_path = os.path.join(os.path.dirname(__file__), "../../../firebaseConfig.json")
 key_path = os.path.join(os.path.dirname(__file__), "../../../key.json")
@@ -19,15 +20,16 @@ api = Blueprint('geo', __name__, url_prefix='/api/geo')
 def get(username:str):
   data = db.collection(u'geo').document(username).get()
   if data.exists:
-    return jsonify(data.to_dict()), 200
+    data = data.to_dict()
+    data['location'] = {'lat': data['location'].latitude, 'lng': data['location'].longitude}
+    return jsonify(data), 200
   else:
     return jsonify(data.to_dict()), 404
 
 @api.route('/<username>/<longitude>/<latitude>/<accuracy>', methods=['POST'])
 def post(username:str, longitude:str, latitude:str, accuracy:str):
   data = {
-    "longitude": float(longitude),
-    "latitude": float(latitude),
+    "location": GeoPoint(float(latitude), float(longitude)),
     "accuracy": float(accuracy)
   }
 
