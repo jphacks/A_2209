@@ -276,10 +276,11 @@ const GoogleMaps = (
         marginLeft: "12px",
         padding:" 0 11px 0 13px",
         textOverflow: "ellipsis",
-        width: "400px",
+        width:"80%",
         height:"80%",
         margin:"0%",
-        marginTop:'4px'
+        marginTop:'4px',
+        display:'inline'
 }}/>
       </Box>
       <div id='map' style={{height:window.innerHeight}}/>
