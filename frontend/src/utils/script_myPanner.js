@@ -1,4 +1,4 @@
-class NavigatorPanner extends PannerNode {
+export default class NavigatorPanner extends PannerNode {
     constructor (context) {
         super(context, {positionZ: -1, panningModel: "HRTF"});
         this.currentLatitude = 0;

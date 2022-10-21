@@ -1,5 +1,8 @@
 // CORSエラー回避: about:configからsecurity.fileuri.strict_origin_policyをfalseに
-class AudioPlayer {
+import NavigatorPanner from "./script_myPanner";
+
+
+export default class AudioPlayer {
     constructor() {
         this.audioContext = new AudioContext();
         this.audioElement = new Audio();
@@ -21,8 +24,10 @@ class AudioPlayer {
     }
     setAudioURL(fileUrl) {
         this.audioElement.src = fileUrl;
+        this.audioElement.type = "audio/mpeg"
     }
     play() {
+        this.audioElement.volume = 0.1
         this.audioElement.play();
     }
     pause() {

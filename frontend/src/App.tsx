@@ -3,7 +3,7 @@ import { Loader } from "@googlemaps/js-api-loader"
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import {Button} from '@mui/material';
-
+import AudioPlayer from "./utils/script_audioPlayer";
 
 const App:React.FC = () =>{
   
@@ -116,8 +116,117 @@ const GoogleMaps = (
     
     
     
-  },[])
+  },[]);
   
+  const handleClick = ()=>{
+    console.log("handleClick")
+    const ap = new AudioPlayer();
+
+    function success(pos:any) {
+      const curLoc = pos.coords;
+      ap.setCurrentCoordinate(curLoc.latitude, curLoc.longitude);
+  }
+    function error(err:any) {
+      console.warn('ERROR(' + err.code + '): ' + err.message);
+  }
+    function detectOSSimply() {
+      let ret;
+      if (
+          navigator.userAgent.indexOf("iPhone") > 0 ||
+          navigator.userAgent.indexOf("iPad") > 0 ||
+          navigator.userAgent.indexOf("iPod") > 0
+      ) {
+          // iPad OS13のsafariはデフォルト「Macintosh」なので別途要対応
+          ret = "iphone";
+      } else if (navigator.userAgent.indexOf("Android") > 0) {
+          ret = "android";
+      } else {
+          ret = "pc";
+      }
+
+      return ret;
+  }
+
+    function compassHeading(alpha, beta, gamma) {
+      var degtorad = Math.PI / 180; // Degree-to-Radian conversion
+
+      var _x = beta ? beta * degtorad : 0; // beta value
+      var _y = gamma ? gamma * degtorad : 0; // gamma value
+      var _z = alpha ? alpha * degtorad : 0; // alpha value
+
+      var cX = Math.cos(_x);
+      var cY = Math.cos(_y);
+      var cZ = Math.cos(_z);
+      var sX = Math.sin(_x);
+      var sY = Math.sin(_y);
+      var sZ = Math.sin(_z);
+
+      // Calculate Vx and Vy components
+      var Vx = -cZ * sY - sZ * sX * cY;
+      var Vy = -sZ * sY + cZ * sX * cY;
+
+      // Calculate compass heading
+      var compassHeading = Math.atan(Vx / Vy);
+
+      // Convert compass heading to use whole unit circle
+      if (Vy < 0) {
+          compassHeading += Math.PI;
+      } else if (Vx < 0) {
+          compassHeading += 2 * Math.PI;
+      }
+
+      return compassHeading * (180 / Math.PI); // Compass Heading (in degrees)
+  }
+
+  function watchHeadingiPhone(event) {
+    const degrees = 360 - event.webkitCompassHeading;
+    ap.setHeading(degrees);
+  }
+
+  function watchHeadingAndroid(event) {
+    const alpha = event.alpha;
+    const beta = event.beta;
+    const gamma = event.gamma;
+    if (alpha === null) {
+        window.removeEventListener("deviceorientationabsolute", watchHeadingAndroid);
+        alert("deviceorientationabsolute非対応");
+        return;
+    }
+    const degrees = 360 - compassHeading(alpha, beta, gamma);
+    ap.setHeading(degrees);
+}    
+
+
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    };
+
+    ap.setDestinationCoordinate(destiPosition.lat(),destiPosition.lng())
+    ap.setAudioURL("./music.ogg")
+    const watch_position_id = navigator.geolocation.watchPosition(success,error,options);
+    ap.setHeading(89)
+    if(OS == "iphone") {
+      // iPhone + Safariの場合はDeviceOrientation APIの使用許可をユーザに求める
+      (DeviceOrientationEvent as any).requestPermission()
+          .then(response => {
+              if (response === "granted") {
+                  window.addEventListener("deviceorientation", watchHeadingiPhone);
+              }
+          })
+          .catch(err => {console.log(err)});
+    }else if(OS == "android") {
+        window.addEventListener("deviceorientationabsolute", watchHeadingAndroid);
+        //window.addEventListener("deviceorientation", watchHeadingAndroid);
+    }else {
+        alert("環境チェックで弾かれました");
+    }
+
+    ap.play()
+    return null;
+  }
+
   
   useEffect(()=>{
     destiMarker.setMap(null)
@@ -184,7 +293,7 @@ const GoogleMaps = (
         <Box style={{margin:"10px"}}>
           <p>{destiTitle}</p>
           <Box>
-            <Button variant="outlined" size='large'>出発する</Button>
+            <Button variant="outlined" size='large' onClick={handleClick}>出発する</Button>
           </Box>
         </Box>
       </Drawer>
