@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>idokeido_html4_2</title>
+</head>
+<body>
+    <label>現在地緯度:<input type="number" id="currentLatitudeInput"></label>内部値：<span id="internalCurrentLatitudeDisp"></span><br>
+    <label>現在地経度:<input type="number" id="currentLongitudeInput"></label>内部値：<span id="internalCurrentLongitudeDisp"></span><br>
+    <label>目的地緯度:<input type="number" id="destinationLatitudeInput" value="43.0611335"></label>内部値：<span id="internalDestinationLatitudeDisp"></span><br>
+    <label>目的地経度:<input type="number" id="destinationLongitudeInput" value="141.3563701"></label>内部値：<span id="internalDestinationLongitudeDisp"></span><br>
+    <button type="button" onclick="setCoordinatesFromInputs()">緯度経度を入力欄からロード</button><br>
+    <button type="button" id="toggleWatchPositionButton" onclick="toggleWatchPosition()">現在地自動更新をON</button><br>    
+    <button type="button" onclick="getCurPos()">現在地取得</button><span id="geoSutDisp">現在地未取得</span><br>
+    現在地から見た目的地の方角（北が0, 西が90）:<span id="azimath"></span><br>
+    音のなる方角（北が0, 西が90）:<span id="dispSoundAzimath"></span><br>
+    自分が向いてる方角（北が0, 西が90）:<span id="dispHeadingAzimath"></span><br>
+    <!--自分の机が東向きという理由だけで設置されたボタン-->
+    <button type="button" onclick="updateSndAzimath()">現在地と目的地から東を向いてる前提で音の向き更新</button><br>
+    <button type="button" onclick="resetSndAzimath()">音の向き0にする(デバッグ用)</button><br>
+    
+    <button type="button" onclick="play()">Play</button>
+    <button type="button" onclick="pause()">Pause</button>
+    <button type="button" onclick="stop()">Stop</button><br>
+    deviceOrientationAbsoluteの代わりのスライダーです。左端が北を向いている状態、右にスライドするにつれ自分は左回転します<br>
+    <input type="range" id="myslider" min="0" max="360" step="10"><br>
+    目的地の初期値はさっぽろテレビ塔です
+    <script src="script_myPanner.js"></script>
+    <script src="script_audioPlayer.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
