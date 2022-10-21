@@ -1,4 +1,4 @@
-import React, { useState,useCallback, useEffect,createContext, useContext } from "react";
+import React, { useState,useCallback, useEffect,createContext, useContext ,useRef} from "react";
 import { Loader } from "@googlemaps/js-api-loader"
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -81,6 +81,9 @@ const GoogleMaps = (
   const [destiPosition,setDestionPosition] = useState<google.maps.LatLng>(new google.maps.LatLng({lat:0,lng:0}))
   const [destiMarker,setDestiMarker] = useState<google.maps.Marker>(new google.maps.Marker(null))
   const [showModal,setShowModal] = useState<boolean>(false)
+  const[isPlaying,setIsPlaying] = useState<boolean>(false)
+  const [isAudioCreated,setIsAudioCreated] = useState<boolean>(false)
+  const apRef:any = useRef(null)
   
 
 
@@ -109,20 +112,30 @@ const GoogleMaps = (
       setDestiTitle(desti.name!);
       setDestionPosition(desti.geometry?.location!);
       setShowModal(true);
+      stopAudio();
       
     })
     
     
     
   },[]);
+
+  const stopAudio = ()=>{
+    const aud = document.getElementById("audio") as HTMLAudioElement;
+    aud.pause()
+    setIsPlaying(false)
+  }
   
   const handleClick = ()=>{
     console.log("handleClick")
-    const ap = new AudioPlayer();
+    if(!isAudioCreated){
+      apRef.current = new AudioPlayer();
+      setIsAudioCreated(true)
+    }
 
     function success(pos:any) {
       const curLoc = pos.coords;
-      ap.setCurrentCoordinate(curLoc.latitude, curLoc.longitude);
+      apRef.current.setCurrentCoordinate(curLoc.latitude, curLoc.longitude);
   }
     function error(err:any) {
       console.warn('ERROR(' + err.code + '): ' + err.message);
@@ -178,7 +191,7 @@ const GoogleMaps = (
 
   function watchHeadingiPhone(event:any) {
     const degrees = 360 - event.webkitCompassHeading;
-    ap.setHeading(degrees);
+    apRef.current.setHeading(degrees);
   }
 
   function watchHeadingAndroid(event:any) {
@@ -191,7 +204,7 @@ const GoogleMaps = (
         return;
     }
     const degrees = 360 - compassHeading(alpha, beta, gamma);
-    ap.setHeading(degrees);
+    apRef.curent.setHeading(degrees);
 }    
 
 
@@ -201,10 +214,9 @@ const GoogleMaps = (
       maximumAge: 0
     };
 
-    ap.setDestinationCoordinate(destiPosition.lat(),destiPosition.lng())
+    apRef.current.setDestinationCoordinate(destiPosition.lat(),destiPosition.lng())
     // ap.setAudioURL("music.ogg")
     const watch_position_id = navigator.geolocation.watchPosition(success,error,options);
-    ap.setHeading(89)
     const OS = detectOSSimply();
 
     if(OS == "iphone") {
@@ -223,7 +235,8 @@ const GoogleMaps = (
         alert("環境チェックで弾かれました");
     }
 
-    ap.play()
+    apRef.current.play();
+    setIsPlaying(true);
     return null;
   }
 
@@ -256,7 +269,9 @@ const GoogleMaps = (
     animation:google.maps.Animation.DROP})
 
   return (
+    
     <div style={{height:window.innerHeight}}>
+
       <Box sx={{
         width: window.innerWidth,
         textAlign:"center",
@@ -281,9 +296,17 @@ const GoogleMaps = (
         margin:"0%",
         marginTop:'4px',
         display:'inline'
-}}/>
+      }}/>
+
       </Box>
       <div id='map' style={{height:window.innerHeight}}/>
+      {
+        isPlaying&&(
+          <Button id="musicStopper" color='secondary' variant="outlined" style={{position:"absolute",bottom:"10px",left:'10px',width:'100px',height:'100px'}} onClick={stopAudio}>停止</Button>
+
+        )
+      }
+
       <Drawer
       anchor="bottom"
       open={showModal}

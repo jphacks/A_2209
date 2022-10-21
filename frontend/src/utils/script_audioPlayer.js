@@ -7,7 +7,6 @@ export default class AudioPlayer {
         this.audioContext = new AudioContext();
         this.audioElement = document.getElementById("audio");
         this.audioElement.loop = true;
-        // this.audioElement.src = "music.ogg"
         this.audioSource = this.audioContext.createMediaElementSource(this.audioElement);
         this.panner = new NavigatorPanner(this.audioContext);
 
