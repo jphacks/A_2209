@@ -202,7 +202,7 @@ const GoogleMaps = (
     };
 
     ap.setDestinationCoordinate(destiPosition.lat(),destiPosition.lng())
-    ap.setAudioURL("./music.ogg")
+    // ap.setAudioURL("music.ogg")
     const watch_position_id = navigator.geolocation.watchPosition(success,error,options);
     ap.setHeading(89)
     const OS = detectOSSimply();

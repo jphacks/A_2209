@@ -5,8 +5,9 @@ import NavigatorPanner from "./script_myPanner";
 export default class AudioPlayer {
     constructor() {
         this.audioContext = new AudioContext();
-        this.audioElement = new Audio();
+        this.audioElement = document.getElementById("audio");
         this.audioElement.loop = true;
+        // this.audioElement.src = "music.ogg"
         this.audioSource = this.audioContext.createMediaElementSource(this.audioElement);
         this.panner = new NavigatorPanner(this.audioContext);
 
@@ -23,8 +24,9 @@ export default class AudioPlayer {
         this.panner.setHeading(_heading);
     }
     setAudioURL(fileUrl) {
-        this.audioElement.src = fileUrl;
+        this.audioElement.src = "FileUrl";
         this.audioElement.type = "audio/mpeg"
+        this.audioElement.crossOrigin = "anonymous";
     }
     play() {
         this.audioElement.volume = 0.1
