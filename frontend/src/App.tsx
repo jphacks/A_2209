@@ -59,7 +59,6 @@ const Markers:React.FC = ()=>{
   );
   }//end of make_marker
 
-  useEffect(make_marker,[])
 
   // console.log(marker.getPosition())
   // const handleClick = useCallback(async () => {
@@ -80,10 +79,9 @@ const GoogleMaps = (
   const [googleMap,setGoogleMap] = useState<google.maps.Map|null>(null);
   const [destiTitle,setDestiTitle] = useState<string>("");
   const [destiPosition,setDestionPosition] = useState<google.maps.LatLng>(new google.maps.LatLng({lat:0,lng:0}))
-  const [destiMarker,setDestiMarker] = useState<google.maps.Marker>(new google.maps.Marker)
+  const [destiMarker,setDestiMarker] = useState<google.maps.Marker>(new google.maps.Marker(null))
   const [showModal,setShowModal] = useState<boolean>(false)
   
-  let desti_marker:google.maps.Marker;
 
 
 
@@ -204,7 +202,7 @@ const GoogleMaps = (
     };
 
     ap.setDestinationCoordinate(destiPosition.lat(),destiPosition.lng())
-    ap.setAudioURL("./music.ogg")
+    // ap.setAudioURL("music.ogg")
     const watch_position_id = navigator.geolocation.watchPosition(success,error,options);
     ap.setHeading(89)
     const OS = detectOSSimply();
@@ -278,10 +276,11 @@ const GoogleMaps = (
         marginLeft: "12px",
         padding:" 0 11px 0 13px",
         textOverflow: "ellipsis",
-        width: "400px",
+        width:"80%",
         height:"80%",
         margin:"0%",
-        marginTop:'4px'
+        marginTop:'4px',
+        display:'inline'
 }}/>
       </Box>
       <div id='map' style={{height:window.innerHeight}}/>
