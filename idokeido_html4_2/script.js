@@ -95,7 +95,7 @@ function inputChange(){
 myslider.addEventListener('input', inputChange);
 
 function resetSndAzimath() {
-    audioPlayer.setPan(0);
+    audioPlayer.panner.setPan(0);
     dispSoundNavigatorParam();
 }
 
