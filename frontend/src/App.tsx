@@ -28,12 +28,12 @@ type markerInfo = {
 const Markers:React.FC = ()=>{
   const {googleMap} = useContext(GoogleMapsContext);
 
-  let markers:Array<markerInfo> = [];
+  let my_pos:markerInfo
   if(navigator.geolocation){
     let pos:google.maps.LatLng 
     navigator.geolocation.getCurrentPosition((position:GeolocationPosition)=>{
     pos = new google.maps.LatLng({lat:position.coords.latitude,lng:position.coords.longitude})
-    markers.push({position:pos,title:"yourplace"})
+    my_pos = {position:pos,title:"yourplace"}
     googleMap?.setCenter(pos)
     make_marker()
     })
@@ -42,21 +42,19 @@ const Markers:React.FC = ()=>{
   const infowindow = new google.maps.InfoWindow()
   
   const make_marker = () =>{
-    markers.forEach(({position,title}) => {
       const marker = new google.maps.Marker({
-        position:position,
-        title:title,
+        position:my_pos["position"],
+        title:my_pos["title"],
         map:googleMap,
+        icon:"me.png",
         animation:google.maps.Animation.DROP
+        
       })
       marker.addListener("click",()=>{
         infowindow.close();
         infowindow.setContent(marker.getTitle());
         infowindow.open(marker.getMap(),marker)
       })
-    }
-
-  );
   }//end of make_marker
 
 
@@ -232,7 +230,7 @@ const GoogleMaps = (
         window.addEventListener("deviceorientationabsolute", watchHeadingAndroid);
         //window.addEventListener("deviceorientation", watchHeadingAndroid);
     }else {
-        alert("環境チェックで弾かれました");
+        alert("お使いの環境はこのプロダクトに対応していない可能性があります！");
     }
 
     apRef.current.play();
