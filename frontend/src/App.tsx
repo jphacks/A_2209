@@ -281,7 +281,6 @@ const GoogleMaps = (
         },
       }}>
       <input id="search-box" style={{
-        color:'red',
         backgroundColor:"#fff",
         fontFamily: "Roboto",
         fontSize: "25px",
