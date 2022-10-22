@@ -260,12 +260,6 @@ const GoogleMaps = (
   },[]);
 
 
-  const marker = new google.maps.Marker({
-    map:googleMap,
-    title:"hoge",
-    position:new google.maps.LatLng({lat:20,lng:20}),
-    animation:google.maps.Animation.DROP})
-
   return (
     
     <div style={{height:window.innerHeight}}>
