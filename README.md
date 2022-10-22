@@ -1,6 +1,6 @@
 # Sound Direction
 
-![IMAGE ALT TEXT HERE](sumnail.png)](https://ch-directions.web.app/)
+![IMAGE ALT TEXT HERE](sumnail.png)(https://ch-directions.web.app/)
 
 ## 製品概要
 立体音響技術を用いて目的地から音が流れているように感じさせることによる、新しい道案内。  
