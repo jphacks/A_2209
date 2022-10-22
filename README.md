@@ -1,7 +1,7 @@
 # Sound Direction
 
 ![IMAGE ALT TEXT HERE](sumnail.png)
-プロダクト：https://ch-directions.web.app/
+プロダクト：https://ch-directions.web.app/<br>
 デモ動画：https://77.gigafile.nu/0130-e7eed8f861b652735ff436f8160dcef12
 
 ## 製品概要
