@@ -330,7 +330,7 @@ const Map:React.FC = () =>{
 
   const initGoogleMapsApi:any = useCallback(async ()=>{
     const loader = new Loader({
-      apiKey: "AIzaSyDf1aXCWkuVlHMoIlyiWUAjaFo4mPfLKm8",
+      apiKey: "AIzaSyAjW2YgEkci-bYHMBBylxs93NxORFbNyl4",
       version:'weekly',
       libraries:["places"]
 
