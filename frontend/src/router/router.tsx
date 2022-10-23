@@ -1,9 +1,7 @@
 import React from 'react';
 import {Box, Button, Card, CardActions, CardContent, CardHeader, TextField} from "@mui/material";
-import './index.css';
-import firebaseConfig from './firebaseConfig.json';
 import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
-import { BrowserRouter, Link, createBrowserRouter, RouterProvider, Route, Routes} from "react-router-dom";
+import { BrowserRouter, Link, Route, Routes} from "react-router-dom";
 // import axios from "axios";
 import { memo, useState } from "react";
 // import { useNavigate } from "react-router-dom";
@@ -13,9 +11,8 @@ import { memo, useState } from "react";
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
-import {Signin} from './components/signin'
-import {Signup} from './components/signup'
-import Home from './pages/home'
+import {Signin} from '../components/signin'
+import {Signup} from '../components/signup'
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -24,14 +21,14 @@ import Home from './pages/home'
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 
-const App: React.FC = () => {
+export const Router = () => {
+
   return (
-    <BrowserRouter>
+    <>
       <Routes>
-        <Route path='/' element={<Home />} />
+        <Route path="/" element={<Signin />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
-    </BrowserRouter>
+    </>
   );
 };
-
-export default App;
