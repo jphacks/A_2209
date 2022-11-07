@@ -327,7 +327,7 @@ const GoogleMaps = (
 
 const Map:React.FC = () =>{
   const [googleMapsApiLoaded,setgoogleMapsApiLoaded] = useState<boolean>(false);
-
+  console.log(process.env["HOGE"])
   const initGoogleMapsApi:any = useCallback(async ()=>{
     const loader = new Loader({
       apiKey: process.env["MAP_API_KEY"]!,
