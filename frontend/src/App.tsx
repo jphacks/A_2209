@@ -327,10 +327,10 @@ const GoogleMaps = (
 
 const Map:React.FC = () =>{
   const [googleMapsApiLoaded,setgoogleMapsApiLoaded] = useState<boolean>(false);
-  console.log(process.env["HOGE"])
+  console.log(process.env["REACT_APP_HOGE"])
   const initGoogleMapsApi:any = useCallback(async ()=>{
     const loader = new Loader({
-      apiKey: process.env["MAP_API_KEY"]!,
+      apiKey: process.env["REACT_APP_MAP_API_KEY"]!,
       version:'weekly',
       libraries:["places"]
 
