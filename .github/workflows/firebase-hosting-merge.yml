@@ -12,7 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: build_and_deploy
-        env: MAP_API_KEY:'${{secrets.MAP_API_KEY}}'
+        env: 
+             MAP_API_KEY:'${{secrets.MAP_API_KEY}}'
              CI:false
         run: npm ci && npm run build
         working-directory: ./frontend
