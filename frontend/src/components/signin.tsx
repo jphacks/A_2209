@@ -1,18 +1,17 @@
-import React from 'react';
+import React, { memo, useState } from 'react';
 import {Box, Button, Card, CardActions, CardContent, CardHeader, TextField, Avatar, makeStyles} from "@mui/material";
-// import './index.css';
-import firebaseConfig from '../firebaseConfig.json';
-import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
-// import axios from "axios";
-import { memo, useState } from "react";
-// import { User } from "../types/User";
-import { Link } from "react-router-dom";
+import GoogleIcon from '@mui/icons-material/Google';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
+import { Link } from "react-router-dom";
 // Import the functions you need from the SDKs you need
 // import firebase from "firebase"
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
+
+import firebaseConfig from '../firebaseConfig.json';
+import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
 
 const provider = new GoogleAuthProvider();
 
@@ -23,15 +22,6 @@ const provider = new GoogleAuthProvider();
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 // Initialize Firebase
-// var ui = new firebaseui.auth.AuthUI(firebase.auth());
-
-
-// async function getCities(db) {
-//   const citiesCol = collection(db, 'cities');
-//   const citySnapshot = await getDocs(citiesCol);
-//   const cityList = citySnapshot.docs.map(doc => doc.data());
-//   return cityList;
-// }
 
 export const Signin = memo(() => {
 
@@ -65,7 +55,8 @@ export const Signin = memo(() => {
     display: "block",
     transitionDuration: "0.3s",
     height: "450px",
-    width: "400px",
+    width: "90vw",
+    maxWidth: "400px",
     variant: "outlined",
   };
 
@@ -85,23 +76,6 @@ export const Signin = memo(() => {
       });
   };
 
-  const useStyles = makeStyles((theme:any) => ({
-    button: {
-        backgroundColor: "#fff",
-        height: theme.spacing(5),
-        '&:hover': {
-            background: "#fff",
-            boxShadow: "0 0 6px #4285f4"
-        },
-    },
-    small: {
-        width: theme.spacing(2),
-        height: theme.spacing(2),
-    },
-  }));
-
-  const classes = useStyles
-
   const [email, setUserId] = useState("");
   const [password, setPassword] = useState("");
 
@@ -111,9 +85,10 @@ export const Signin = memo(() => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        padding={20}
+        marginTop="5vh"
       >
         <Card style={cardStyle}>
+          <Link to={'/'}><ArrowBackIosIcon></ArrowBackIosIcon>戻る</Link>
           <CardHeader title="ログイン" />
           <CardContent>
             <div>
@@ -152,9 +127,10 @@ export const Signin = memo(() => {
             <Button
               variant="outlined"
               // color="default"
-              startIcon={<Avatar src={'https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg'} className={classes.small} />}
+              startIcon={
+                <GoogleIcon></GoogleIcon>
+              }
               style={{textTransform: 'capitalize'}}
-              className={classes.button}
               onClick={onGoogleButoonClick}
             >
             Sign in with Google

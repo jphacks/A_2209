@@ -1,19 +1,15 @@
-import React from 'react';
-import { memo, useState } from "react";
+import React, { memo, useState } from 'react';
 import {Box, Button, Card, CardActions, CardContent, CardHeader, TextField} from "@mui/material";
-// import './index.css';
-import firebaseConfig from '../firebaseConfig.json';
-import { getFirestore, collection, getDocs, getDoc, addDoc, doc, setDoc } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
-// import axios from "axios";
-// import { memo, useState } from "react";
-// import { User } from "../types/User";
 
 // Import the functions you need from the SDKs you need
 // import firebase from "firebase"
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
+
+import firebaseConfig from '../firebaseConfig.json';
+import { getFirestore, collection, getDocs, getDoc, addDoc, doc, setDoc } from 'firebase/firestore';
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -140,7 +136,7 @@ export const Signup = memo(() => {
               Sign up
             </Button>
           </CardActions>
-          <p className="signup-link">アカウント登録がお済の方は<Link to={'/'}>こちら</Link>からサインイン</p>
+          <p className="signup-link">アカウント登録がお済の方は<Link to={'/signin'}>こちら</Link>からサインイン</p>
         </Card>
       </Box>
     </>

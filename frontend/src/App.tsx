@@ -5,7 +5,6 @@ import firebaseConfig from './firebaseConfig.json';
 // import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
 import { BrowserRouter, Link, createBrowserRouter, RouterProvider, Route, Routes} from "react-router-dom";
 // import axios from "axios";
-import { memo, useState } from "react";
 // import { useNavigate } from "react-router-dom";
 
 // Import the functions you need from the SDKs you need

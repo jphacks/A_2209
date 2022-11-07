@@ -5,6 +5,7 @@ import Drawer from '@mui/material/Drawer';
 import {Button} from '@mui/material';
 import AudioPlayer from "../utils/script_audioPlayer";
 import { redirect, Link } from 'react-router-dom';
+import googleMapAPI from '../googleMapAPI.json'
 
 const Home:React.FC = () =>{
 
@@ -270,15 +271,20 @@ const GoogleMaps = (
     <div style={{height:window.innerHeight}}>
 
       <Box sx={{
-        width: window.innerWidth,
-        textAlign:"center",
-        height: 60,
-        backgroundColor: 'primary.dark',
-        // '&:hover': {
-        //   backgroundColor: 'primary.main',
-        //   opacity: [0.9, 0.8, 0.7],
-        // },
-      }}>
+          width: window.innerWidth,
+          textAlign:"center",
+          height: 60,
+          backgroundColor: 'primary.dark',
+          // '&:hover': {
+          //   backgroundColor: 'primary.main',
+          //   opacity: [0.9, 0.8, 0.7],
+          // },
+          }}
+          alignItems="center"
+          justifyContent="center"
+          position="absolute"
+          zIndex={1000}
+        >
         <input id="search-box" style={{
           backgroundColor:"#fff",
           fontFamily: "Roboto",
@@ -301,6 +307,9 @@ const GoogleMaps = (
           }}
           component={Link}
           to='/signin'
+          style={{
+            marginTop: "1px"
+          }}
         >
           ログイン
         </Button>
@@ -342,11 +351,12 @@ const GoogleMaps = (
 
 
 const Map:React.FC = () =>{
+  const key = googleMapAPI.key
   const [googleMapsApiLoaded,setgoogleMapsApiLoaded] = useState<boolean>(false);
 
   const initGoogleMapsApi:any = useCallback(async ()=>{
     const loader = new Loader({
-      apiKey: "AIzaSyCq6ZfJ3PPa_VPkMShYLlVR4WFKYRD_j4k",
+      apiKey: key,
       version:'weekly',
       libraries:["places"]
 
