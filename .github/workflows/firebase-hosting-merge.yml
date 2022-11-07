@@ -15,9 +15,8 @@ jobs:
         env: 
              CI: false
              MAP_API_KEY: ${{secrets.MAP_API_KEY}}
-        run: npm ci && npm run build
+        run: npm ci && npm run build && echo "${{secrets.MAP_API_KEY}}"
         working-directory: ./frontend
-        run: echo "${{secrets.MAP_API_KEY}}"
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
@@ -25,4 +24,6 @@ jobs:
           channelId: live
           projectId: ch-directions
           entryPoint: "./frontend"
+      - name: debug
+        run: echo "${{secrets.HOGE}}"
 
