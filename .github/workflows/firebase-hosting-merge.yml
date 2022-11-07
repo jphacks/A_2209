@@ -15,7 +15,8 @@ jobs:
         working-directory: ./frontend
         with:
           MAP_API_KEY:'${{secrets.MAP_API_KEY}}'
-
+        env:
+          CI: false
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
