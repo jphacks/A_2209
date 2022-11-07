@@ -16,7 +16,7 @@ jobs:
              CI: false
              MAP_API_KEY: ${{secrets.REACT_APP_MAP_API_KEY}}
              HOGE: ${{secrets.HOGE}}
-        run: npm ci && npm run build"
+        run: npm ci && npm run build
         working-directory: ./frontend
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
