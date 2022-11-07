@@ -13,8 +13,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: build_and_deploy
         env: 
-             MAP_API_KEY:'${{secrets.MAP_API_KEY}}'
              CI:false
+             MAP_API_KEY:${{secrets.MAP_API_KEY}}
         run: npm ci && npm run build
         working-directory: ./frontend
       - uses: FirebaseExtended/action-hosting-deploy@v0
