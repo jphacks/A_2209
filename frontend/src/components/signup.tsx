@@ -4,6 +4,7 @@ import {Box, Button, Card, CardActions, CardContent, CardHeader, TextField} from
 // import './index.css';
 import firebaseConfig from '../firebaseConfig.json';
 import { getFirestore, collection, getDocs, getDoc, addDoc, doc, setDoc } from 'firebase/firestore';
+import { Link } from 'react-router-dom';
 // import axios from "axios";
 // import { memo, useState } from "react";
 // import { User } from "../types/User";
@@ -139,7 +140,7 @@ export const Signup = memo(() => {
               Sign up
             </Button>
           </CardActions>
-          <p className="signup-link">アカウント登録がお済の方は<span><a href='na.html'>こちら</a></span>からサインイン</p>
+          <p className="signup-link">アカウント登録がお済の方は<Link to={'/'}>こちら</Link>からサインイン</p>
         </Card>
       </Box>
     </>

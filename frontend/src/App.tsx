@@ -1,8 +1,8 @@
 import React from 'react';
-import {Box, Button, Card, CardActions, CardContent, CardHeader, TextField} from "@mui/material";
+// import {Box, Button, Card, CardActions, CardContent, CardHeader, TextField} from "@mui/material";
 import './index.css';
 import firebaseConfig from './firebaseConfig.json';
-import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
+// import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
 import { BrowserRouter, Link, createBrowserRouter, RouterProvider, Route, Routes} from "react-router-dom";
 // import axios from "axios";
 import { memo, useState } from "react";
@@ -10,9 +10,9 @@ import { memo, useState } from "react";
 
 // Import the functions you need from the SDKs you need
 // import firebase from "firebase"
-import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { getAnalytics } from "firebase/analytics";
+// import { initializeApp } from "firebase/app";
+// import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+// import { getAnalytics } from "firebase/analytics";
 import {Signin} from './components/signin'
 import {Signup} from './components/signup'
 import Home from './pages/home'
@@ -29,6 +29,8 @@ const App: React.FC = () => {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Home />} />
+        <Route path='/signup' element={<Signup />} />
+        <Route path='/signin' element={<Signin />} />
       </Routes>
     </BrowserRouter>
   );
