@@ -11,12 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: npm ci && npm run build
+      - name: build_and_deploy
+        env: MAP_API_KEY:'${{secrets.MAP_API_KEY}}'
+             CI:false
+        run: npm ci && npm run build
         working-directory: ./frontend
-        with:
-          MAP_API_KEY:'${{secrets.MAP_API_KEY}}'
-        env:
-          CI: false
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
