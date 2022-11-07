@@ -336,7 +336,7 @@ const Map:React.FC = () =>{
 
   const initGoogleMapsApi:any = useCallback(async ()=>{
     const loader = new Loader({
-      apiKey: "AIzaSyAjW2YgEkci-bYHMBBylxs93NxORFbNyl4",
+      apiKey: process.env["MAP_API_KEY"]!,
       version:'weekly',
       libraries:["places"]
 
