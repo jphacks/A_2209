@@ -14,9 +14,9 @@ jobs:
       - name: build_and_deploy
         env: 
              CI: false
-             MAP_API_KEY: ${{secrets.MAP_API_KEY}}
+             MAP_API_KEY: ${{secrets.REACT_APP_MAP_API_KEY}}
              HOGE: ${{secrets.HOGE}}
-        run: npm ci && npm run build && echo "${{secrets.MAP_API_KEY}}"
+        run: npm ci && npm run build"
         working-directory: ./frontend
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -26,5 +26,5 @@ jobs:
           projectId: ch-directions
           entryPoint: "./frontend"
       - name: debug
-        run: echo "${{secrets.HOGE}}"
+        run: echo "${{secrets.REACT_APP_HOGE}}"
 
