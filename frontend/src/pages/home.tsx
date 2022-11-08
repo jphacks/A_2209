@@ -2,10 +2,17 @@ import React, { useState,useCallback, useEffect,createContext, useContext ,useRe
 import { Loader } from "@googlemaps/js-api-loader"
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import {Button} from '@mui/material';
+import Fade from '@mui/material/Fade';
+import {Button, IconButton, FormControlLabel} from '@mui/material';
+import LoginIcon from '@mui/icons-material/Login';
 import AudioPlayer from "../utils/script_audioPlayer";
 import { redirect, Link } from 'react-router-dom';
-import googleMapAPI from '../googleMapAPI.json'
+import googleMapAPI from '../googleMapAPI.json';
+import { CSSTransition } from 'react-transition-group';
+
+import {Signin} from '../components/signin'
+
+import '../css/home.css'
 
 const Home:React.FC = () =>{
 
@@ -91,7 +98,10 @@ const GoogleMaps = (
   const initGoogleMaps = useCallback(()=>{
     const map = new google.maps.Map(document.querySelector("#map")!,{
       center: { lat: -25.344, lng: 131.031 },
-      zoom: 8
+      zoom: 8,
+      fullscreenControl: false,
+      streetViewControl: false,
+      zoomControl:false
     });
     setGoogleMap(map);
   },[])
@@ -261,30 +271,29 @@ const GoogleMaps = (
     initGoogleMaps();
   },[]);
 
-  function redirect_signin(){
-    return redirect('/signin');
-  }
-
+  const [loginPressed, setLoginPressed] = React.useState(false)
+  const nodeRef = useRef(null);
 
   return (
 
     <div style={{height:window.innerHeight}}>
 
       <Box sx={{
-          width: "60vw",
-          textAlign:"center",
-          height: 60,
+          // width: "60vw",
+          // textAlign:"center",
+          // height: 60,
           backgroundColor: 'primary.dark',
-          left: "50%"
+          // left: "50%"
           // '&:hover': {
           //   backgroundColor: 'primary.main',
           //   opacity: [0.9, 0.8, 0.7],
           // },
           }}
-          alignItems="center"
-          justifyContent="center"
-          position="absolute"
-          zIndex={1000}
+          // alignItems="center"
+          // justifyContent="center"
+          // position="absolute"
+          // zIndex={1000}
+          className="header"
         >
         <input id="search-box" style={{
           backgroundColor:"#fff",
@@ -300,36 +309,8 @@ const GoogleMaps = (
           marginTop:'4px',
           display:'inline'
         }}/>
-        <Button className="redirect_signin"
-          variant="outlined"
-          sx={{
-            color: "white",
-            borderColor: "white"
-          }}
-          component={Link}
-          to='/signin'
-          style={{
-            marginTop: "1px"
-          }}
-        >
-          ログイン
-        </Button>
-        <Button className="redirect_signup"
-          variant="outlined"
-          sx={{
-            color: "white",
-            borderColor: "white"
-          }}
-          component={Link}
-          to='/signup'
-          style={{
-            marginTop: "1px"
-          }}
-        >
-          ログイン
-        </Button>
-
       </Box>
+
       <div id='map' style={{height:window.innerHeight}}/>
       {
         isPlaying&&(
@@ -337,6 +318,31 @@ const GoogleMaps = (
 
         )
       }
+
+      <IconButton
+        // component={Link}
+        // to='/signin'
+        className="loginButton"
+        onClick={() => {setLoginPressed(true)}}
+      >
+        <LoginIcon className="loginIcon"></LoginIcon>
+      </IconButton>
+
+      <CSSTransition
+        in={loginPressed}
+        nodeRef={nodeRef}
+        timeout={200}
+      >
+        <Box
+          sx={{
+            height:window.innerHeight,
+            width:window.innerWidth,
+          }}
+          className="shade"
+        >
+          <Signin/>
+        </Box>
+      </CSSTransition>
 
       <Drawer
       anchor="bottom"

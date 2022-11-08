@@ -36,3 +36,34 @@
     transform: rotate(360deg);
   }
 }
+
+.header{
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  z-index: 1000;
+  height: 60px;
+  width: 60vw;
+
+  transform: translateX(-50%) translateY(-50%);
+  left: 50%;
+  top: 90%;
+}
+
+.loginButton{
+  background-color: #fff!important;
+
+  position: absolute!important;
+  z-index: 1000;
+  transform: translateX(-50%) translateY(-50%);
+  left: 90%;
+  top: 5%;
+}
+
+.shade{
+  background-color: #000;
+  opacity: 0.2;
+  position: absolute;
+  z-index: 1001;
+}
