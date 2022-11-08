@@ -61,9 +61,36 @@
   top: 5%;
 }
 
+/* .login{
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1001;
+} */
+
+.login-enter {
+  opacity: 0;
+}
+
+.login-enter-active{
+  transition: all 0.5s ease-in-out;
+  opacity: 1;
+}
+
+.login-exit {
+  opacity: 1; /* opacityの規定値は1だが、省略不可 */
+}
+
+.login-exit-active {
+  transition: all 0.5s ease-in-out;
+  opacity: 0;
+}
+
 .shade{
-  background-color: #000;
-  opacity: 0.2;
+  background-color: rgba(0, 0, 0, 0.5);
   position: absolute;
   z-index: 1001;
+  left: 0;
+  top: 0;
+
 }

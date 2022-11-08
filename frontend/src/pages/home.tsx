@@ -331,7 +331,9 @@ const GoogleMaps = (
       <CSSTransition
         in={loginPressed}
         nodeRef={nodeRef}
-        timeout={200}
+        timeout={500}
+        unmountOnExit
+        classNames="login"
       >
         <Box
           sx={{
@@ -340,7 +342,7 @@ const GoogleMaps = (
           }}
           className="shade"
         >
-          <Signin/>
+        <Signin/>
         </Box>
       </CSSTransition>
 
