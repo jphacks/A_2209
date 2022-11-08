@@ -271,10 +271,11 @@ const GoogleMaps = (
     <div style={{height:window.innerHeight}}>
 
       <Box sx={{
-          width: window.innerWidth,
+          width: "60vw",
           textAlign:"center",
           height: 60,
           backgroundColor: 'primary.dark',
+          left: "50%"
           // '&:hover': {
           //   backgroundColor: 'primary.main',
           //   opacity: [0.9, 0.8, 0.7],
@@ -307,6 +308,20 @@ const GoogleMaps = (
           }}
           component={Link}
           to='/signin'
+          style={{
+            marginTop: "1px"
+          }}
+        >
+          ログイン
+        </Button>
+        <Button className="redirect_signup"
+          variant="outlined"
+          sx={{
+            color: "white",
+            borderColor: "white"
+          }}
+          component={Link}
+          to='/signup'
           style={{
             marginTop: "1px"
           }}
