@@ -1,6 +1,8 @@
-import React, { memo, useState } from 'react';
-import {Box, Button, Card, CardActions, CardContent, CardHeader, TextField} from "@mui/material";
-import { Link } from 'react-router-dom';
+import React, { memo, useState, useContext } from 'react';
+import { Box, Button, Card, CardActions, CardContent, CardHeader, TextField, IconButton } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
+
+// import { Link } from 'react-router-dom';
 
 // Import the functions you need from the SDKs you need
 // import firebase from "firebase"
@@ -10,6 +12,9 @@ import { getAnalytics } from "firebase/analytics";
 
 import firebaseConfig from '../firebaseConfig.json';
 import { getFirestore, collection, getDocs, getDoc, addDoc, doc, setDoc } from 'firebase/firestore';
+
+import { pressedType, Pressed } from '../hooks/hooks';
+import '../css/signup.css'
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -39,7 +44,7 @@ export const Signup = memo(() => {
     display: "block",
     transitionDuration: "0.3s",
     height: "550px",
-    width: "400px",
+    width: "450px",
     variant: "outlined",
   };
 
@@ -85,17 +90,28 @@ export const Signup = memo(() => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const isPressed: pressedType = useContext(Pressed);
+
   return (
     <>
       <Box
         display="flex"
         alignItems="center"
         justifyContent="center"
-        padding={20}
       >
         <Card style={cardStyle}>
           <CardHeader title="アカウント新規登録" />
           <CardContent>
+            <IconButton
+              onClick={() => {
+                isPressed.setShade(false);
+                isPressed.setSignin(false);
+                isPressed.setSignup(false);
+              }}
+              className="closeIcon"
+            >
+              <CloseIcon></CloseIcon>
+            </IconButton>
             <div>
               <TextField
                 fullWidth
@@ -136,7 +152,22 @@ export const Signup = memo(() => {
               Sign up
             </Button>
           </CardActions>
-          <p className="signup-link">アカウント登録がお済の方は<Link to={'/signin'}>こちら</Link>からサインイン</p>
+          <p className="toSignup">既にアカウントをお持ちの方</p>
+          <CardActions>
+            <Button
+              variant="contained"
+              // color="default"
+              style={{
+                margin: "0 auto"
+              }}
+              onClick={() => {
+                isPressed.setSignin(true);
+                isPressed.setSignup(false);
+              }}
+            >
+            ログイン
+            </Button>
+          </CardActions>
         </Card>
       </Box>
     </>

@@ -1,8 +1,10 @@
-import React, { useState,useCallback, useEffect,createContext, useContext ,useRef} from "react";
+import React, { useState, useCallback, useEffect, createContext, useContext, useRef } from "react";
 import { Loader } from "@googlemaps/js-api-loader"
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Fade from '@mui/material/Fade';
+import Grow from '@mui/material/Grow';
+import Slide from '@mui/material/Slide';
 import {Button, IconButton, FormControlLabel} from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import CloseIcon from '@mui/icons-material/Close';
@@ -12,6 +14,8 @@ import { CSSTransition } from 'react-transition-group';
 
 import {Signin} from '../components/signin'
 import {Signup} from '../components/signup'
+// import { useShadePressed, useLoginPressed, useSignupPressed } from "../hooks/hooks";
+import { pressedType, Pressed } from '../hooks/hooks'
 
 import '../css/home.css'
 
@@ -272,16 +276,10 @@ const GoogleMaps = (
     initGoogleMaps();
   },[]);
 
-  const [shadePressed, setShadePressed] = React.useState(false)
-  const [loginPressed, setLoginPressed] = React.useState(false)
-  const [signupPressed, setSignupPressed] = React.useState(false)
-
-  const nodeRef = useRef(null);
-
-  function shade_login(){
-    setShadePressed(true);
-    setLoginPressed(true);
-  }
+  // const {shadePressed, shadePressedtoFalse, shadePressedtoTrue} = useShadePressed();
+  // const {loginPressed, loginPressedtoFalse, loginPressedtoTrue} = useLoginPressed();
+  // const {signupPressed, signupPressedtoFalse, signupPressedtoTrue} = useSignupPressed();
+  const isPressed: pressedType = useContext(Pressed);
 
   return (
 
@@ -333,51 +331,48 @@ const GoogleMaps = (
         // to='/signin'
         className="loginButton"
         onClick={() => {
-          setLoginPressed(true);
-          setShadePressed(true);
+          isPressed.setShade(true);
+          isPressed.setSignin(true);
+          isPressed.setSignup(false);
         }}
       >
         <LoginIcon className="loginIcon"></LoginIcon>
       </IconButton>
 
-      <CSSTransition
-        in={shadePressed}
-        nodeRef={nodeRef}
-        timeout={500}
+      <Fade
+        in={isPressed.shade}
         unmountOnExit
-        classNames="shade-"
       >
-        <div className="shade">
-          <div
-            className="signin"
-            style={{
-              opacity: loginPressed ? 0 : 1,
-              transition: "all 0.5s ease-in-out",
-            }}
-          >
-            <Signin/>
-            <p className="toSignup">アカウント登録がお済出ない方は<a href="" onClick={() => {setSignupPressed(true); setLoginPressed(false)}}>こちら</a>をクリック</p>
-          </div>
-
-          <CSSTransition
-            in={signupPressed}
-            nodeRef={nodeRef}
-            timeout={500}
+        <div
+          className="shade"
+          // onClick={() => {
+          //   isPressed.setShade(false);
+          //   isPressed.setSignin(false);
+          //   isPressed.setSignup(false);
+          // }}
+        >
+          <Grow
             unmountOnExit
-            classNames="signup"
+            in={isPressed.signin}
+            className="signin signWrapper"
           >
-            <Signup/>
-          </CSSTransition>
+            <div>
+              <Signin/>
+            </div>
+          </Grow>
 
-          <IconButton
-            onClick={() => {setLoginPressed(false); setSignupPressed(false)}}
-            className="closeIcon"
+          <Grow
+            unmountOnExit
+            in={isPressed.signup}
+            className="signup  signWrapper"
           >
-            <CloseIcon></CloseIcon>
-          </IconButton>
+            <div>
+              <Signup/>
+            </div>
+          </Grow>
 
         </div>
-      </CSSTransition>
+      </Fade>
 
       <Drawer
       anchor="bottom"

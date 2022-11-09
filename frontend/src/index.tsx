@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState, useContext, createContext } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import {Router} from "./router/router"
-import { BrowserRouter, Link, createBrowserRouter, RouterProvider, Route, Routes} from "react-router-dom";
+// import { shadePressed, loginPressed, signupPressed } from './hooks/hooks'
 import reportWebVitals from './reportWebVitals';
+import { PressedProvider } from './hooks/hooks';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -12,7 +12,9 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <App />
+    <PressedProvider>
+      <App />
+    </PressedProvider>
   </React.StrictMode>
 );
 

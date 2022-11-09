@@ -1,9 +1,10 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState, useContext } from 'react';
 import {Box, Button, Card, CardActions, CardContent, CardHeader, TextField, Avatar, makeStyles, IconButton} from "@mui/material";
 import GoogleIcon from '@mui/icons-material/Google';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import CloseIcon from '@mui/icons-material/Close';
 
-import { Link } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
 // Import the functions you need from the SDKs you need
 // import firebase from "firebase"
 import { initializeApp } from "firebase/app";
@@ -12,6 +13,10 @@ import { getAnalytics } from "firebase/analytics";
 
 import firebaseConfig from '../firebaseConfig.json';
 import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
+
+// import { shadePressed, loginPressed, signupPressed } from '../hooks/hooks';
+import { pressedType, Pressed } from '../hooks/hooks';
+import '../css/signin.css';
 
 const provider = new GoogleAuthProvider();
 
@@ -30,6 +35,14 @@ export const Signin = memo(() => {
   const auth = getAuth(app);
   const analytics = getAnalytics(app);
 
+  function redirect_home() {
+    isPressed.setShade(false);
+    isPressed.setSignin(false);
+    isPressed.setSignup(false);
+    redirect("/");
+    isPressed.setIsSignedin(true);
+  };
+
   function onGoogleButoonClick(){
     signInWithPopup(auth, provider)
     .then((result) => {
@@ -39,6 +52,7 @@ export const Signin = memo(() => {
       // The signed-in user info.
       const user = result.user;
       // ...
+      redirect_home();
     }).catch((error) => {
       // Handle Errors here.
       const errorCode = error.code;
@@ -54,9 +68,9 @@ export const Signin = memo(() => {
   const cardStyle = {
     display: "block",
     transitionDuration: "0.3s",
-    height: "450px",
+    height: "500px",
     width: "90vw",
-    maxWidth: "400px",
+    maxWidth: "450px",
     variant: "outlined",
   };
 
@@ -65,8 +79,9 @@ export const Signin = memo(() => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        console.log(user)
+        console.log(user);
         // ...
+        redirect_home();
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -79,18 +94,29 @@ export const Signin = memo(() => {
   const [email, setUserId] = useState("");
   const [password, setPassword] = useState("");
 
+  const isPressed: pressedType = useContext(Pressed);
+
   return (
     <>
       <Box
         display="flex"
         alignItems="center"
         justifyContent="center"
-        marginTop="5vh"
       >
         <Card style={cardStyle}>
           <CardHeader title="ログイン" />
           <CardContent>
             <div>
+              <IconButton
+                onClick={() => {
+                  isPressed.setShade(false);
+                  isPressed.setSignin(false);
+                  isPressed.setSignup(false);
+                }}
+                className="closeIcon"
+              >
+                <CloseIcon></CloseIcon>
+              </IconButton>
               <TextField
                 fullWidth
                 id="email"
@@ -132,6 +158,22 @@ export const Signin = memo(() => {
               onClick={onGoogleButoonClick}
             >
             Sign in with Google
+            </Button>
+          </CardActions>
+          <p className="toSignup">アカウント登録をお持ちでない方</p>
+          <CardActions>
+            <Button
+              variant="contained"
+              // color="default"
+              style={{
+                margin: "0 auto",
+              }}
+              onClick={() => {
+                isPressed.setSignin(false);
+                isPressed.setSignup(true);
+              }}
+            >
+            アカウント新規登録
             </Button>
           </CardActions>
         </Card>

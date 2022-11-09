@@ -68,31 +68,6 @@
   height: 1.8rem!important;
 }
 
-/* .login{
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 1001;
-} */
-
-.shade--enter {
-  opacity: 0;
-}
-
-.shade--enter-active{
-  transition: all 0.5s ease-in-out;
-  opacity: 1;
-}
-
-.shade--exit {
-  opacity: 1;
-}
-
-.shade--exit-active {
-  transition: all 0.5s ease-in-out;
-  opacity: 0;
-}
-
 .shade{
   background-color: rgba(0, 0, 0, 0.5);
   position: absolute;
@@ -105,19 +80,23 @@
 }
 
 .closeIcon{
-  position: absolute;
+  position: absolute!important;
   transform: translateX(-50%) translateY(-50%);
-  left: calc(50% + 160px);
-  top: calc(-450px + 2rem);
-  /* left: 0; */
+  left: calc(100% - 2rem);
+  top: 2rem;
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: calc(400px / 0.9)) {
   .closeIcon{
-    position: absolute;
-    transform: translateX(-50%) translateY(-50%);
-    left: calc(50% + 4 / 5 * 90vw / 2);
-    top: calc(-450px + 2rem);
-    /* left: 0; */
+    /* left: calc(90% - 11%); */
+    /* top: calc(5% + 3%); */
   }
+}
+
+.signWrapper{
+  position: absolute;
+  transform: translateX(-50%) translateY(-50%)!important;
+  left: 50%;
+  top: 50%;
+  z-index: 1002;
 }
