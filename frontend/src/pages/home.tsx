@@ -5,12 +5,13 @@ import Drawer from '@mui/material/Drawer';
 import Fade from '@mui/material/Fade';
 import {Button, IconButton, FormControlLabel} from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
+import CloseIcon from '@mui/icons-material/Close';
 import AudioPlayer from "../utils/script_audioPlayer";
-import { redirect, Link } from 'react-router-dom';
 import googleMapAPI from '../googleMapAPI.json';
 import { CSSTransition } from 'react-transition-group';
 
 import {Signin} from '../components/signin'
+import {Signup} from '../components/signup'
 
 import '../css/home.css'
 
@@ -271,8 +272,16 @@ const GoogleMaps = (
     initGoogleMaps();
   },[]);
 
+  const [shadePressed, setShadePressed] = React.useState(false)
   const [loginPressed, setLoginPressed] = React.useState(false)
+  const [signupPressed, setSignupPressed] = React.useState(false)
+
   const nodeRef = useRef(null);
+
+  function shade_login(){
+    setShadePressed(true);
+    setLoginPressed(true);
+  }
 
   return (
 
@@ -323,27 +332,51 @@ const GoogleMaps = (
         // component={Link}
         // to='/signin'
         className="loginButton"
-        onClick={() => {setLoginPressed(true)}}
+        onClick={() => {
+          setLoginPressed(true);
+          setShadePressed(true);
+        }}
       >
         <LoginIcon className="loginIcon"></LoginIcon>
       </IconButton>
 
       <CSSTransition
-        in={loginPressed}
+        in={shadePressed}
         nodeRef={nodeRef}
         timeout={500}
         unmountOnExit
-        classNames="login"
+        classNames="shade-"
       >
-        <Box
-          sx={{
-            height:window.innerHeight,
-            width:window.innerWidth,
-          }}
-          className="shade"
-        >
-        <Signin/>
-        </Box>
+        <div className="shade">
+          <div
+            className="signin"
+            style={{
+              opacity: loginPressed ? 0 : 1,
+              transition: "all 0.5s ease-in-out",
+            }}
+          >
+            <Signin/>
+            <p className="toSignup">アカウント登録がお済出ない方は<a href="" onClick={() => {setSignupPressed(true); setLoginPressed(false)}}>こちら</a>をクリック</p>
+          </div>
+
+          <CSSTransition
+            in={signupPressed}
+            nodeRef={nodeRef}
+            timeout={500}
+            unmountOnExit
+            classNames="signup"
+          >
+            <Signup/>
+          </CSSTransition>
+
+          <IconButton
+            onClick={() => {setLoginPressed(false); setSignupPressed(false)}}
+            className="closeIcon"
+          >
+            <CloseIcon></CloseIcon>
+          </IconButton>
+
+        </div>
       </CSSTransition>
 
       <Drawer
@@ -371,7 +404,6 @@ const GoogleMaps = (
   )
 
 }
-
 
 const Map:React.FC = () =>{
   const key = googleMapAPI.key

@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import {Box, Button, Card, CardActions, CardContent, CardHeader, TextField, Avatar, makeStyles} from "@mui/material";
+import {Box, Button, Card, CardActions, CardContent, CardHeader, TextField, Avatar, makeStyles, IconButton} from "@mui/material";
 import GoogleIcon from '@mui/icons-material/Google';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
@@ -88,7 +88,6 @@ export const Signin = memo(() => {
         marginTop="5vh"
       >
         <Card style={cardStyle}>
-          <Link to={'/'}><ArrowBackIosIcon></ArrowBackIosIcon>戻る</Link>
           <CardHeader title="ログイン" />
           <CardContent>
             <div>
@@ -122,7 +121,6 @@ export const Signin = memo(() => {
               Login
             </Button>
           </CardActions>
-          <p className="signup-link">アカウント登録がお済でない方は<Link to={'/signup'}>こちら</Link>をクリック</p>
           <CardActions>
             <Button
               variant="outlined"
