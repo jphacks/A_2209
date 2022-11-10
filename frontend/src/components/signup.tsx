@@ -13,7 +13,7 @@ import { getAnalytics } from "firebase/analytics";
 import firebaseConfig from '../firebaseConfig.json';
 import { getFirestore, collection, getDocs, getDoc, addDoc, doc, setDoc } from 'firebase/firestore';
 
-import { pressedType, Pressed } from '../hooks/hooks';
+import { pressedType, Pressed } from '../contexts/contexts';
 import '../css/signup.css'
 
 // TODO: Add SDKs for Firebase products that you want to use

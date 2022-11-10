@@ -2,6 +2,19 @@ import React, { memo, useState, useContext } from 'react';
 import {Box, Button, Card, CardActions, CardContent, CardHeader, TextField, IconButton} from "@mui/material";
 import GoogleIcon from '@mui/icons-material/Google';
 import CloseIcon from '@mui/icons-material/Close';
+import LogoutIcon from '@mui/icons-material/Logout';
+import ListSubheader from '@mui/material/ListSubheader';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Collapse from '@mui/material/Collapse';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import DraftsIcon from '@mui/icons-material/Drafts';
+import SendIcon from '@mui/icons-material/Send';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import StarBorder from '@mui/icons-material/StarBorder';
 
 import { redirect } from "react-router-dom";
 // Import the functions you need from the SDKs you need
@@ -27,7 +40,7 @@ const provider = new GoogleAuthProvider();
 
 // Initialize Firebase
 
-export const Signin = memo(() => {
+export const UserUtils = memo(() => {
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
@@ -115,86 +128,54 @@ export const Signin = memo(() => {
 
   return (
     <>
-      <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <Card style={cardStyle}>
-          <CardHeader title="ログイン" />
-          <CardContent>
-            <div>
-              <IconButton
-                onClick={() => {
-                  isPressed.setShade(false);
-                  isPressed.setSignin(false);
-                  isPressed.setSignup(false);
-                }}
-                className="closeIcon"
-              >
-                <CloseIcon></CloseIcon>
-              </IconButton>
-              <TextField
-                fullWidth
-                id="email"
-                type="email"
-                label="Email"
-                placeholder="Email"
-                margin="normal"
-                onChange={(e) => setUserId(e.target.value)}
-              />
-              <TextField
-                fullWidth
-                id="password"
-                type="password"
-                label="Password"
-                placeholder="Password"
-                margin="normal"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-          </CardContent>
-          <CardActions>
-            <Button className='login'
-              variant="contained"
-              size="large"
-              color="primary"
-              onClick={onClickLogin}
-            >
-              Login
-            </Button>
-          </CardActions>
-          <CardActions>
-            <Button
-              variant="outlined"
-              // color="default"
-              startIcon={
-                <GoogleIcon></GoogleIcon>
-              }
-              style={{textTransform: 'capitalize'}}
-              onClick={onGoogleButoonClick}
-            >
-            Sign in with Google
-            </Button>
-          </CardActions>
-          <p className="toSignup">アカウント登録をお持ちでない方</p>
-          <CardActions>
-            <Button
-              variant="contained"
-              // color="default"
-              style={{
-                margin: "0 auto",
-              }}
-              onClick={() => {
-                isPressed.setSignin(false);
-                isPressed.setSignup(true);
-              }}
-            >
-            アカウント新規登録
-            </Button>
-          </CardActions>
-        </Card>
-      </Box>
+      <List
+      sx={{ width: '80vw', maxWidth: "450px", bgcolor: 'background.paper' }}
+      component="nav"
+      aria-labelledby="nested-list-subheader"
+      subheader={
+        <ListSubheader component="div" id="nested-list-subheader">
+          {isPressed.user.uid}
+          <IconButton
+            onClick={() => {
+              isPressed.setShade(false);
+              isPressed.setUserUtils(false);
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </ListSubheader>
+      }
+    >
+      <ListItemButton>
+        <ListItemIcon>
+          <LogoutIcon />
+        </ListItemIcon>
+        <ListItemText primary="ログアウト" />
+      </ListItemButton>
+      {/* <ListItemButton>
+        <ListItemIcon>
+          <DraftsIcon />
+        </ListItemIcon>
+        <ListItemText primary="Drafts" />
+      </ListItemButton>
+      <ListItemButton onClick={handleClick}>
+        <ListItemIcon>
+          <InboxIcon />
+        </ListItemIcon>
+        <ListItemText primary="Inbox" />
+        {open ? <ExpandLess /> : <ExpandMore />}
+      </ListItemButton>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <ListItemButton sx={{ pl: 4 }}>
+            <ListItemIcon>
+              <StarBorder />
+            </ListItemIcon>
+            <ListItemText primary="Starred" />
+          </ListItemButton>
+        </List>
+      </Collapse> */}
+    </List>
     </>
   );
 });

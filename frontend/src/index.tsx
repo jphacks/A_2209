@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 // import { shadePressed, loginPressed, signupPressed } from './hooks/hooks'
 import reportWebVitals from './reportWebVitals';
-import { PressedProvider } from './hooks/hooks';
+import { PressedProvider } from './contexts/contexts';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

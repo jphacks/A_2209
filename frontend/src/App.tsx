@@ -12,8 +12,6 @@ import { BrowserRouter, Link, createBrowserRouter, RouterProvider, Route, Routes
 // import { initializeApp } from "firebase/app";
 // import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 // import { getAnalytics } from "firebase/analytics";
-import {Signin} from './components/signin'
-import {Signup} from './components/signup'
 import Home from './pages/home'
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -28,8 +26,6 @@ const App: React.FC = () => {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/signup' element={<Signup />} />
-        <Route path='/signin' element={<Signin />} />
       </Routes>
     </BrowserRouter>
   );

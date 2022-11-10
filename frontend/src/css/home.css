@@ -44,14 +44,16 @@
   position: absolute;
   z-index: 1000;
   height: 60px;
-  width: 60vw;
+  width: 100vw;
+  padding-top: 4px;
+  padding-bottom: 4px;
 
-  transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%);
   left: 50%;
-  top: 90%;
+  /* top: 90%; */
 }
 
-.loginButton{
+.utilButton{
   background-color: #fff!important;
 
   position: absolute!important;
@@ -63,7 +65,7 @@
   height: 3rem;
 }
 
-.loginIcon{
+.utilIcon{
   width: 1.8rem!important;
   height: 1.8rem!important;
 }

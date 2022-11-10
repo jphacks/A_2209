@@ -8,14 +8,16 @@ import Slide from '@mui/material/Slide';
 import {Button, IconButton, FormControlLabel} from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import CloseIcon from '@mui/icons-material/Close';
+import PersonIcon from '@mui/icons-material/Person';
 import AudioPlayer from "../utils/script_audioPlayer";
 import googleMapAPI from '../googleMapAPI.json';
 import { CSSTransition } from 'react-transition-group';
 
 import {Signin} from '../components/signin'
 import {Signup} from '../components/signup'
+import { UserUtils } from "../components/userUtils";
 // import { useShadePressed, useLoginPressed, useSignupPressed } from "../hooks/hooks";
-import { pressedType, Pressed } from '../hooks/hooks'
+import { pressedType, Pressed } from '../contexts/contexts'
 
 import '../css/home.css'
 
@@ -106,7 +108,8 @@ const GoogleMaps = (
       zoom: 8,
       fullscreenControl: false,
       streetViewControl: false,
-      zoomControl:false
+      zoomControl:false,
+      mapTypeControl: false,
     });
     setGoogleMap(map);
   },[])
@@ -327,16 +330,32 @@ const GoogleMaps = (
       }
 
       <IconButton
-        // component={Link}
-        // to='/signin'
-        className="loginButton"
+        className="loginButton utilButton"
+        style={{
+          display: isPressed.isSignedin ? "none" : "block",
+        }}
         onClick={() => {
           isPressed.setShade(true);
           isPressed.setSignin(true);
           isPressed.setSignup(false);
         }}
       >
-        <LoginIcon className="loginIcon"></LoginIcon>
+        <LoginIcon className="loginIcon utilIcon"></LoginIcon>
+      </IconButton>
+
+      <IconButton
+        className="userButton utilButton"
+        style={{
+          display: isPressed.isSignedin ? "block" : "none",
+        }}
+        onClick={() => {
+          isPressed.setShade(true);
+          isPressed.setSignin(false);
+          isPressed.setSignup(false);
+          isPressed.setUserUtils(true);
+        }}
+      >
+        <PersonIcon className="userIcon utilIcon"></PersonIcon>
       </IconButton>
 
       <Fade
@@ -370,6 +389,18 @@ const GoogleMaps = (
               <Signup/>
             </div>
           </Grow>
+
+          <Slide
+            mountOnEnter
+            unmountOnExit
+            in={isPressed.userUtils}
+            direction="left"
+            className="userUtils"
+          >
+            <div>
+              <UserUtils />
+            </div>
+          </Slide>
 
         </div>
       </Fade>
