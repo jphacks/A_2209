@@ -10,7 +10,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
 
-import firebaseConfig from '../firebaseConfig.json';
+import firebaseConfig from '../apis';
 import { getFirestore } from 'firebase/firestore/lite';
 
 // import { shadePressed, loginPressed, signupPressed } from '../hooks/hooks';

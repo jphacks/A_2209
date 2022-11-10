@@ -1,17 +1,7 @@
 import React from 'react';
-// import {Box, Button, Card, CardActions, CardContent, CardHeader, TextField} from "@mui/material";
 import './index.css';
-import firebaseConfig from './firebaseConfig.json';
-// import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
 import { BrowserRouter, Link, createBrowserRouter, RouterProvider, Route, Routes} from "react-router-dom";
-// import axios from "axios";
-// import { useNavigate } from "react-router-dom";
 
-// Import the functions you need from the SDKs you need
-// import firebase from "firebase"
-// import { initializeApp } from "firebase/app";
-// import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-// import { getAnalytics } from "firebase/analytics";
 import Home from './pages/home'
 
 // TODO: Add SDKs for Firebase products that you want to use

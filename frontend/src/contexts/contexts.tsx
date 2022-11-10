@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
 
-import firebaseConfig from '../firebaseConfig.json';
+import firebaseConfig from '../apis';
 
 export interface pressedType {
   shade: boolean;

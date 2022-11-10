@@ -10,7 +10,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
 
-import firebaseConfig from '../firebaseConfig.json';
+import firebaseConfig from '../apis';
 import { getFirestore, collection, getDocs, getDoc, addDoc, doc, setDoc } from 'firebase/firestore';
 
 import { pressedType, Pressed } from '../contexts/contexts';
