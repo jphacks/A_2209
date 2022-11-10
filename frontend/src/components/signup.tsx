@@ -44,7 +44,8 @@ export const Signup = memo(() => {
     display: "block",
     transitionDuration: "0.3s",
     height: "550px",
-    width: "450px",
+    width: "90vw",
+    maxWidth: "450px",
     variant: "outlined",
   };
 

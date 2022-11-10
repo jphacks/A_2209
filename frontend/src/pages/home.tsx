@@ -5,6 +5,7 @@ import Drawer from '@mui/material/Drawer';
 import Fade from '@mui/material/Fade';
 import Grow from '@mui/material/Grow';
 import Slide from '@mui/material/Slide';
+import Alert from '@mui/material/Alert'
 import {Button, IconButton, FormControlLabel} from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import CloseIcon from '@mui/icons-material/Close';
@@ -235,8 +236,7 @@ const GoogleMaps = (
     }
     const degrees = 360 - compassHeading(alpha, beta, gamma);
     apRef.curent.setHeading(degrees);
-}
-
+  }
 
     const options = {
       enableHighAccuracy: true,
@@ -295,6 +295,7 @@ const GoogleMaps = (
   // const {loginPressed, loginPressedtoFalse, loginPressedtoTrue} = useLoginPressed();
   // const {signupPressed, signupPressedtoFalse, signupPressedtoTrue} = useSignupPressed();
   const isPressed: pressedType = useContext(Pressed);
+  const [alertTimer, setAlertTimer] = useState(false);
 
   return (
 
@@ -341,6 +342,14 @@ const GoogleMaps = (
           <Button id="musicStopper" color='primary' variant="contained" style={{position:"absolute",bottom:"10px",left:'10px',width:'100px',height:'100px'}} onClick={startAudio}>再生</Button>
       ):null}
 
+      <Slide
+        mountOnEnter
+        unmountOnExit
+        in={isPressed.alert && isPressed.isSignedin && (isPressed.alertState == 'success')}
+        direction="down"
+      >
+        <Alert severity="success">Signed in successfully</Alert>
+      </Slide>
 
       <IconButton
         className="loginButton utilButton"

@@ -20,7 +20,7 @@ import { redirect } from "react-router-dom";
 // Import the functions you need from the SDKs you need
 // import firebase from "firebase"
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
 
 import firebaseConfig from '../apis';
@@ -57,8 +57,10 @@ export const UserUtils = memo(() => {
     isPressed.setShade(false);
     isPressed.setSignin(false);
     isPressed.setSignup(false);
-    redirect("/");
     isPressed.setIsSignedin(false);
+    isPressed.setUserUtils(false);
+    isPressed.setUser(null);
+    redirect("/");
   };
 
   function onGoogleButoonClick(){
@@ -91,91 +93,97 @@ export const UserUtils = memo(() => {
     variant: "outlined",
   };
 
-  const onClickLogin = async () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        console.log(user);
-        // ...
+  const onClickLogout = async () => {
+    signOut(auth)
+      .then(() => {
+        redirect_home_signedout();
       })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode)
-        console.log(errorMessage)
+      .catch(() => {
+        alert('ログアウト失敗')
       });
   };
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/firebase.User
-      redirect_home_signedin();
-      const uid = user.uid;
-      // ...
-    } else {
-      // User is signed out
-      // ...
-      redirect_home_signedout();
-    }
-  });
+  // onAuthStateChanged(auth, (user) => {
+  //   if (user) {
+  //     // User is signed in, see docs for a list of available properties
+  //     // https://firebase.google.com/docs/reference/js/firebase.User
+  //     redirect_home_signedin();
+  //     const uid = user.uid;
+  //     // ...
+  //   } else {
+  //     // User is signed out
+  //     // ...
+  //     redirect_home_signedout();
+  //   }
+  // });
 
   const [email, setUserId] = useState("");
   const [password, setPassword] = useState("");
 
   const isPressed: pressedType = useContext(Pressed);
 
+  if(isPressed.user.uid){
+    var displayName: string = isPressed.user.uid;
+  }else{
+    var displayName: string = '';
+  }
+
   return (
     <>
       <List
-      sx={{ width: '80vw', maxWidth: "450px", bgcolor: 'background.paper' }}
-      component="nav"
-      aria-labelledby="nested-list-subheader"
-      subheader={
-        <ListSubheader component="div" id="nested-list-subheader">
-          {isPressed.user.uid}
-          <IconButton
-            onClick={() => {
-              isPressed.setShade(false);
-              isPressed.setUserUtils(false);
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
-        </ListSubheader>
-      }
-    >
-      <ListItemButton>
-        <ListItemIcon>
-          <LogoutIcon />
-        </ListItemIcon>
-        <ListItemText primary="ログアウト" />
-      </ListItemButton>
-      {/* <ListItemButton>
-        <ListItemIcon>
-          <DraftsIcon />
-        </ListItemIcon>
-        <ListItemText primary="Drafts" />
-      </ListItemButton>
-      <ListItemButton onClick={handleClick}>
-        <ListItemIcon>
-          <InboxIcon />
-        </ListItemIcon>
-        <ListItemText primary="Inbox" />
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemIcon>
-              <StarBorder />
-            </ListItemIcon>
-            <ListItemText primary="Starred" />
-          </ListItemButton>
-        </List>
-      </Collapse> */}
-    </List>
+        sx={{
+          width: '80vw',
+          maxWidth: "450px",
+          bgcolor: 'background.paper'
+        }}
+        component="nav"
+        aria-labelledby="nested-list-subheader"
+        subheader={
+          <ListSubheader component="div" id="nested-list-subheader">
+            {displayName}
+            <IconButton
+              onClick={() => {
+                isPressed.setShade(false);
+                isPressed.setUserUtils(false);
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </ListSubheader>
+        }
+      >
+        <ListItemButton
+          onClick={onClickLogout}
+        >
+          <ListItemIcon>
+            <LogoutIcon />
+          </ListItemIcon>
+          <ListItemText primary="ログアウト" />
+        </ListItemButton>
+        {/* <ListItemButton>
+          <ListItemIcon>
+            <DraftsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Drafts" />
+        </ListItemButton> */}
+        {/* <ListItemButton onClick={handleClick}>
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary="Inbox" />
+          {open ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton> */}
+        {/* <Collapse in={open} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItemButton sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="Starred" />
+            </ListItemButton>
+          </List>
+        </Collapse> */}
+      </List>
     </>
   );
 });
