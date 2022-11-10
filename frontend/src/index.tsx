@@ -1,15 +1,20 @@
-import React from 'react';
+import React, { useState, useContext, createContext } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+// import { shadePressed, loginPressed, signupPressed } from './hooks/hooks'
 import reportWebVitals from './reportWebVitals';
+import { PressedProvider } from './contexts/contexts';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 root.render(
   <React.StrictMode>
-    <App />
+    <PressedProvider>
+      <App />
+    </PressedProvider>
   </React.StrictMode>
 );
 

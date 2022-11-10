@@ -15,6 +15,14 @@ jobs:
         env: 
              CI: false
              REACT_APP_MAP_API_KEY: ${{secrets.REACT_APP_MAP_API_KEY}}
+             REACT_APP_API_KEY: ${{secrets.REACT_APP_API_KEY}}
+             REACT_APP_AUTH_DOMAIN: ${{secrets.REACT_APP_AUTH_DOMAIN}}
+             REACT_APP_DATABASE_URL: ${{secrets.REACT_APP_DATABASE_URL}}
+             REACT_APP_PROJECT_ID: ${{secrets.REACT_APP_PROJECT_ID}}
+             REACT_APP_STORAGE_BUCKET: ${{secrets.REACT_APP_STORAGE_BUCKET}}
+             REACT_APP_SENDER_ID: ${{secrets.REACT_APP_SENDER_ID}}
+             REACT_APP_APP_ID: ${{secrets.REACT_APP_APP_ID}}
+             REACT_APP_MEASUREMENT_ID: ${{secrets.REACT_APP_MEASUREMENT_ID}}
         run: npm ci && npm run build
         working-directory: ./frontend
       - uses: FirebaseExtended/action-hosting-deploy@v0
@@ -26,4 +34,3 @@ jobs:
           entryPoint: "./frontend"
       - name: debug
         run: echo "${{secrets.REACT_APP_HOGE}}"
-

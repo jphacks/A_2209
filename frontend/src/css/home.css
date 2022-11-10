@@ -1,0 +1,104 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.header{
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  z-index: 1000;
+  height: 60px;
+  width: 100vw;
+  padding-top: 4px;
+  padding-bottom: 4px;
+
+  transform: translateX(-50%);
+  left: 50%;
+  /* top: 90%; */
+}
+
+.utilButton{
+  background-color: #fff!important;
+
+  position: absolute!important;
+  z-index: 1000;
+  transform: translateX(-50%) translateY(-50%);
+  left: 90%;
+  top: 5%;
+  width: 3rem;
+  height: 3rem;
+}
+
+.utilIcon{
+  width: 1.8rem!important;
+  height: 1.8rem!important;
+}
+
+.shade{
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  z-index: 1001;
+  left: 0;
+  top: 0;
+
+  width: 100%;
+  height: 100%;
+}
+
+.closeIcon{
+  position: absolute!important;
+  transform: translateX(-50%) translateY(-50%);
+  left: calc(100% - 2rem);
+  top: 2rem;
+}
+
+@media screen and (max-width: calc(400px / 0.9)) {
+  .closeIcon{
+    /* left: calc(90% - 11%); */
+    /* top: calc(5% + 3%); */
+  }
+}
+
+.signWrapper{
+  position: absolute;
+  transform: translateX(-50%) translateY(-50%)!important;
+  left: 50%;
+  top: 50%;
+  z-index: 1002;
+}

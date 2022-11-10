@@ -7,6 +7,21 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.login {
+  /* display: block; */
+  /* width: 400px */
+  /* float: left; */
+  /* margin-left: 8rem; */
+}
+
+.signup-link {
+  text-align: center;
+  /* margin: 0 auto; */
+  /* display: inline-block; */
+  /* float: right; */
+  /* margin-left: 8rem; */
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
