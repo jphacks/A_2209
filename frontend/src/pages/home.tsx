@@ -94,7 +94,8 @@ const GoogleMaps = (
   const [destiPosition,setDestionPosition] = useState<google.maps.LatLng>(new google.maps.LatLng({lat:0,lng:0}))
   const [destiMarker,setDestiMarker] = useState<google.maps.Marker>(new google.maps.Marker(null))
   const [showModal,setShowModal] = useState<boolean>(false)
-  const[isPlaying,setIsPlaying] = useState<boolean>(false)
+  //audioタグの状態管理　0:startしてない 1:一時停止中 2:再生中
+  const[isPlaying,setIsPlaying] = useState<Number>(0)
   const [isAudioCreated,setIsAudioCreated] = useState<boolean>(false)
   const apRef:any = useRef(null)
 
@@ -129,7 +130,7 @@ const GoogleMaps = (
       setDestiTitle(desti.name!);
       setDestionPosition(desti.geometry?.location!);
       setShowModal(true);
-      stopAudio();
+      endAudio();
 
     })
 
@@ -140,7 +141,19 @@ const GoogleMaps = (
   const stopAudio = ()=>{
     const aud = document.getElementById("audio") as HTMLAudioElement;
     aud.pause()
-    setIsPlaying(false)
+    setIsPlaying(1)
+  }
+
+  const endAudio = ()=>{
+    const aud = document.getElementById("audio") as HTMLAudioElement;
+    aud.pause()
+    setIsPlaying(0)
+  }
+
+  const startAudio = ()=>{
+    const aud = document.getElementById("audio") as HTMLAudioElement;
+    aud.play()
+    setIsPlaying(2)
   }
 
   const handleClick = ()=>{
@@ -253,7 +266,7 @@ const GoogleMaps = (
     }
 
     apRef.current.play();
-    setIsPlaying(true);
+    setIsPlaying(2);
     return null;
   }
 
@@ -288,21 +301,19 @@ const GoogleMaps = (
     <div style={{height:window.innerHeight}}>
 
       <Box sx={{
-          // width: "60vw",
-          // textAlign:"center",
-          // height: 60,
+          width: "100%",
+          textAlign:"center",
+          height: 80,
           backgroundColor: 'primary.dark',
-          // left: "50%"
-          // '&:hover': {
-          //   backgroundColor: 'primary.main',
-          //   opacity: [0.9, 0.8, 0.7],
-          // },
+          left: "50%",
           }}
-          // alignItems="center"
-          // justifyContent="center"
-          // position="absolute"
-          // zIndex={1000}
+          alignItems="center"
+          justifyContent="center"
+          position="absolute"
+          zIndex={1000}
           className="header"
+          left={0}
+          top={0}
         >
         <input id="search-box" style={{
           backgroundColor:"#fff",
@@ -322,11 +333,14 @@ const GoogleMaps = (
 
       <div id='map' style={{height:window.innerHeight}}/>
       {
-        isPlaying&&(
-          <Button id="musicStopper" color='secondary' variant="outlined" style={{position:"absolute",bottom:"10px",left:'10px',width:'100px',height:'100px'}} onClick={stopAudio}>停止</Button>
+        isPlaying==2?(
+          <Button id="musicStopper" color='secondary' variant="contained" style={{position:"absolute",bottom:"10px",left:'10px',width:'100px',height:'100px'}} onClick={stopAudio}>停止</Button>
+          ):null}
+      {
+        isPlaying==1?(
+          <Button id="musicStopper" color='primary' variant="contained" style={{position:"absolute",bottom:"10px",left:'10px',width:'100px',height:'100px'}} onClick={startAudio}>再生</Button>
+      ):null}
 
-        )
-      }
 
       <IconButton
         className="loginButton utilButton"
