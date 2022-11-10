@@ -106,6 +106,10 @@ const GoogleMaps = (
         alert("2つ以上の目的地を設定することはできません")
         return; 
       }
+      if (!navigator.geolocation){
+        alert("このアプリを使用するには、位置情報の取得を有効にしてください")
+        return;
+      }
       const desti = places[0]
       setDestiTitle(desti.name!);
       setDestionPosition(desti.geometry?.location!);
