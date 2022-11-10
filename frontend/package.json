@@ -10,7 +10,6 @@
     "@mui/material": "^5.10.10",
     "@react-google-maps/api": "^2.13.1",
     "@googlemaps/js-api-loader": "^1.14.3",
-    "@googlemaps/react-wrapper": "^1.1.35",
     "@googlemaps/typescript-guards": "^2.0.3",
     "@mui/styled-engine-sc": "^5.10.6",
     "@testing-library/jest-dom": "^5.16.5",
