@@ -20,3 +20,5 @@ const App: React.FC = () => {
     </BrowserRouter>
   );
 };
+
+export default App
