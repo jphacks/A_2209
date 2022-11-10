@@ -10,7 +10,6 @@ import LoginIcon from '@mui/icons-material/Login';
 import CloseIcon from '@mui/icons-material/Close';
 import PersonIcon from '@mui/icons-material/Person';
 import AudioPlayer from "../utils/script_audioPlayer";
-import googleMapAPI from '../googleMapAPI.json';
 import { CSSTransition } from 'react-transition-group';
 
 import {Signin} from '../components/signin'
@@ -432,12 +431,11 @@ const GoogleMaps = (
 }
 
 const Map:React.FC = () =>{
-  const key = googleMapAPI.key
+  const key = process.env["REACT_APP_MAP_API_KEY"]!
   const [googleMapsApiLoaded,setgoogleMapsApiLoaded] = useState<boolean>(false);
 
   const initGoogleMapsApi:any = useCallback(async ()=>{
     const loader = new Loader({
-      // apiKey: process.env["REACT_APP_MAP_API_KEY"]!,
       apiKey: key,
       version:'weekly',
       libraries:["places"]
