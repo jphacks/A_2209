@@ -5,6 +5,7 @@ import Drawer from '@mui/material/Drawer';
 import Fade from '@mui/material/Fade';
 import Grow from '@mui/material/Grow';
 import Slide from '@mui/material/Slide';
+import Alert from '@mui/material/Alert'
 import {Button, IconButton, FormControlLabel} from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import CloseIcon from '@mui/icons-material/Close';
@@ -13,14 +14,24 @@ import MyLocationIcon from '@mui/icons-material/MyLocation';
 import AudioPlayer from "../utils/script_audioPlayer";
 import { CSSTransition } from 'react-transition-group';
 
+import { initializeApp } from "firebase/app";
+import { getFirestore, doc, collection, setDoc } from "firebase/firestore";
+
 import {Signin} from '../components/signin'
 import {Signup} from '../components/signup'
 import { UserUtils } from "../components/userUtils";
 // import { useShadePressed, useLoginPressed, useSignupPressed } from "../hooks/hooks";
 import { pressedType, Pressed } from '../contexts/contexts'
+import firebaseConfig from "../apis";
 
 import '../css/home.css'
 import { borderRadius } from "@mui/system";
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+// Initialize Cloud Firestore and get a reference to the service
+const db = getFirestore(app);
 
 const Home:React.FC = () =>{
 
@@ -244,7 +255,9 @@ const GoogleMaps = (
     }
     const degrees = 360 - compassHeading(alpha, beta, gamma);
     apRef.current.setHeading(degrees);
-}
+    console.log(degrees);
+    setDeg(degrees);
+  }
 
 
     const options = {
@@ -254,6 +267,8 @@ const GoogleMaps = (
     };
 
     apRef.current.setDestinationCoordinate(destiPosition.lat(),destiPosition.lng())
+    console.log(destiPosition.lat())
+    console.log(destiPosition.lng())
     // ap.setAudioURL("music.ogg")
     const watch_position_id = navigator.geolocation.watchPosition(success,error,options);
     const OS = detectOSSimply();
@@ -279,6 +294,27 @@ const GoogleMaps = (
     return null;
   }
 
+  function sendSignal(mode: string, initialLat: number, initialLng: number, initialBrg: number, offset: number){
+    if(isPressed.user !== null){
+      const data = {
+        initialBearing: initialBrg,
+        initialLatitude: initialLat,
+        initialLongitude: initialLng,
+        mode: mode,
+        offset: offset,
+        playing: true,
+        routing: true
+      }
+
+      try {
+        const docRef = setDoc(doc(db, "users", isPressed.user.uid, "signal", "signal"), data);
+
+        console.log("Document written successfully");
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+    }
+  }
 
   useEffect(()=>{
     destiMarker.setMap(null)
@@ -304,6 +340,9 @@ const GoogleMaps = (
   // const {loginPressed, loginPressedtoFalse, loginPressedtoTrue} = useLoginPressed();
   // const {signupPressed, signupPressedtoFalse, signupPressedtoTrue} = useSignupPressed();
   const isPressed: pressedType = useContext(Pressed);
+  const [alertTimer, setAlertTimer] = useState(false);
+
+  const [deg, setDeg] = useState(0);
 
   return (
 
@@ -350,6 +389,14 @@ const GoogleMaps = (
           <Button id="musicStopper" color='primary' variant="contained" style={{position:"absolute",bottom:"10px",left:'10px',width:'100px',height:'100px'}} onClick={startAudio}>再生</Button>
       ):null}
 
+      <Slide
+        mountOnEnter
+        unmountOnExit
+        in={isPressed.alert && isPressed.isSignedin && (isPressed.alertState == 'success')}
+        direction="down"
+      >
+        <Alert severity="success">Signed in successfully</Alert>
+      </Slide>
       <IconButton 
         onClick={setMyplaceCenter}
         style={{

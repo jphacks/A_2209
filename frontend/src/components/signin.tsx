@@ -11,6 +11,7 @@ import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvide
 import { getAnalytics } from "firebase/analytics";
 
 import firebaseConfig from '../apis';
+// import firebaseConfig from '../firebaseConfig';
 import { getFirestore } from 'firebase/firestore/lite';
 
 // import { shadePressed, loginPressed, signupPressed } from '../hooks/hooks';
@@ -32,12 +33,16 @@ export const Signin = memo(() => {
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
-  function redirect_home_signedin() {
+  function redirect_home_signedin(user:any) {
     isPressed.setShade(false);
     isPressed.setSignin(false);
     isPressed.setSignup(false);
-    redirect("/");
     isPressed.setIsSignedin(true);
+    isPressed.setUser(user);
+    isPressed.setAlert(true);
+    isPressed.setAlertState('successful');
+    redirect("/");
+    setTimeout(() => {isPressed.setAlert(false);}, 5000)
   };
 
   function redirect_home_signedout() {
@@ -57,8 +62,10 @@ export const Signin = memo(() => {
       // The signed-in user info.
       const user = result.user;
       // ...
+      redirect_home_signedin(user)
     }).catch((error) => {
       // Handle Errors here.
+      console.log(error)
       const errorCode = error.code;
       const errorMessage = error.message;
       // The email of the user's account used.
@@ -85,6 +92,7 @@ export const Signin = memo(() => {
         const user = userCredential.user;
         console.log(user);
         // ...
+        redirect_home_signedin(user)
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -94,19 +102,19 @@ export const Signin = memo(() => {
       });
   };
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/firebase.User
-      redirect_home_signedin();
-      const uid = user.uid;
-      // ...
-    } else {
-      // User is signed out
-      // ...
-      redirect_home_signedout();
-    }
-  });
+  // onAuthStateChanged(auth, (user) => {
+  //   if (user) {
+  //     // User is signed in, see docs for a list of available properties
+  //     // https://firebase.google.com/docs/reference/js/firebase.User
+  //     redirect_home_signedin();
+  //     const uid = user.uid;
+  //     // ...
+  //   } else {
+  //     // User is signed out
+  //     // ...
+  //     redirect_home_signedout();
+  //   }
+  // });
 
   const [email, setUserId] = useState("");
   const [password, setPassword] = useState("");
