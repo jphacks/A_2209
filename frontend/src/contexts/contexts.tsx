@@ -14,6 +14,7 @@ export interface pressedType {
   alert: boolean;
   user: any;
   alertState: string;
+  credential: any;
   setShade: (shade: boolean) => void;
   setSignin: (signin: boolean) => void;
   setSignup: (signup: boolean) => void;
@@ -22,6 +23,7 @@ export interface pressedType {
   setAlert: (alert: boolean) => void;
   setUser: (user: any) => void;
   setAlertState: (alertState: string) => void;
+  setCredential: (credential: any) => void;
 }
 
 // AppContext の生成
@@ -34,6 +36,7 @@ export const Pressed = createContext<pressedType>({
   alert: false,
   user: '',
   alertState: '',
+  credential: '',
   setShade: (shade: boolean) => {},
   setSignin: (signin: boolean) => {},
   setSignup: (signup: boolean) => {},
@@ -42,6 +45,7 @@ export const Pressed = createContext<pressedType>({
   setAlert: (alert: boolean) => {},
   setUser: (user: any) => {},
   setAlertState: (alertState: string) => {},
+  setCredential: (credential: any) => {},
 });
 
 // AppContext にセッター関数を登録するためのコンポーネント
@@ -62,6 +66,7 @@ export const PressedProvider: React.FC<{ children: any}> = ({children}) => {
   const [alert, setAlert] = useState(context.alert);
   const [user, setUser] = useState(context.user);
   const [alertState, setAlertState] = useState(context.alertState);
+  const [credential, setCredential] = useState(context.credential)
 
   useEffect(() => {
     const unsubscribed = auth.onAuthStateChanged((user:any) => {
@@ -78,7 +83,7 @@ export const PressedProvider: React.FC<{ children: any}> = ({children}) => {
 
   // 下位コンポーネントへ渡す Context
   const newContext: pressedType = {
-    shade, setShade, signin, setSignin, signup, setSignup, isSignedin, setIsSignedin, alert, setAlert, user, setUser, userUtils, setUserUtils, alertState, setAlertState
+    shade, setShade, signin, setSignin, signup, setSignup, isSignedin, setIsSignedin, alert, setAlert, user, setUser, userUtils, setUserUtils, alertState, setAlertState, credential, setCredential
   };
 
   return (

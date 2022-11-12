@@ -14,6 +14,7 @@ import MyLocationIcon from '@mui/icons-material/MyLocation';
 import AudioPlayer from "../utils/script_audioPlayer";
 import { CSSTransition } from 'react-transition-group';
 
+import { getAuth, signInWithEmailAndPassword, getRedirectResult, signInWithRedirect, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, collection, setDoc } from "firebase/firestore";
 
@@ -23,15 +24,20 @@ import { UserUtils } from "../components/userUtils";
 // import { useShadePressed, useLoginPressed, useSignupPressed } from "../hooks/hooks";
 import { pressedType, Pressed } from '../contexts/contexts'
 import firebaseConfig from "../apis";
+import userInfoRegistration from '../components/userInfoRegistration';
+
 
 import '../css/home.css'
 import { borderRadius } from "@mui/system";
+
+const provider = new GoogleAuthProvider();
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 const Home: React.FC = () => {
 
@@ -272,10 +278,7 @@ const GoogleMaps = (
       }
       const degrees = 360 - compassHeading(alpha, beta, gamma);
       apRef.current.setHeading(degrees);
-      console.log(degrees);
-      setDeg(degrees);
     }
-  
 
 
     const options = {
@@ -322,7 +325,7 @@ const GoogleMaps = (
       }
 
       try {
-        const docRef = setDoc(doc(db, "users", isPressed.user.uid, "signal", "signal"), data);
+        setDoc(doc(db, "users", isPressed.user.uid, "signal", "signal"), data);
 
         console.log("Document written successfully");
       } catch (e) {
@@ -351,13 +354,47 @@ const GoogleMaps = (
     initGoogleMaps();
   }, []);
 
-  // const {shadePressed, shadePressedtoFalse, shadePressedtoTrue} = useShadePressed();
-  // const {loginPressed, loginPressedtoFalse, loginPressedtoTrue} = useLoginPressed();
-  // const {signupPressed, signupPressedtoFalse, signupPressedtoTrue} = useSignupPressed();
-  const isPressed: pressedType = useContext(Pressed);
-  const [alertTimer, setAlertTimer] = useState(false);
+  function redirect_home_signedin(user:any) {
+    isPressed.setShade(false);
+    isPressed.setSignin(false);
+    isPressed.setSignup(false);
+    isPressed.setIsSignedin(true);
+    isPressed.setUser(user);
+    isPressed.setAlert(true);
+    isPressed.setAlertState('successful');
+    // redirect("/");
+    setTimeout(() => {isPressed.setAlert(false);}, 5000)
+  };
 
-  const [deg, setDeg] = useState(0);
+  useEffect(() => {
+    getRedirectResult(auth)
+    .then((result:any) => {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      const credential:any = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      // The signed-in user info.
+      const user = result.user;
+      // ...
+      redirect_home_signedin(user)
+      userInfoRegistration(user);
+      console.log(result)
+      isPressed.setCredential(result);
+    }).catch((error) => {
+      // Handle Errors here.
+      console.log(error)
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // The email of the user's account used.
+      const email = error.customData.email;
+      // The AuthCredential type that was used.
+      const credential = GoogleAuthProvider.credentialFromError(error);
+      // ...
+    });
+  });
+
+  const isPressed: pressedType = useContext(Pressed);
+
+  console.log(isPressed.credential)
 
   return (
 
@@ -386,12 +423,40 @@ const GoogleMaps = (
           marginLeft: "12px",
           padding: " 0 11px 0 13px",
           textOverflow: "ellipsis",
-          width: "60%",
-          height: "80%",
-          margin: "0%",
-          marginTop: '4px',
-          display: 'inline'
-        }} />
+          width:"60%",
+          height:"80%",
+          margin:"0%",
+          marginTop:'4px',
+          display:'inline'
+        }}/>
+        <IconButton
+          className="loginButton utilButton"
+          style={{
+            display: isPressed.isSignedin ? "none" : "block",
+          }}
+          onClick={() => {
+            isPressed.setShade(true);
+            isPressed.setSignin(true);
+            isPressed.setSignup(false);
+          }}
+        >
+          <LoginIcon className="loginIcon utilIcon"></LoginIcon>
+        </IconButton>
+
+        <IconButton
+          className="userButton utilButton"
+          style={{
+            display: isPressed.isSignedin ? "block" : "none",
+          }}
+          onClick={() => {
+            isPressed.setShade(true);
+            isPressed.setSignin(false);
+            isPressed.setSignup(false);
+            isPressed.setUserUtils(true);
+          }}
+        >
+          <PersonIcon className="userIcon utilIcon"></PersonIcon>
+        </IconButton>
       </Box>
 
       <div id='map' style={{ height: window.innerHeight }} />
@@ -404,7 +469,7 @@ const GoogleMaps = (
           <Button id="musicStopper" color='primary' variant="contained" style={{ position: "absolute", bottom: "10px", left: '10px', width: '100px', height: '100px' }} onClick={startAudio}>再生</Button>
         ) : null}
 
-      <IconButton 
+      <IconButton
         onClick={setMyplaceCenter}
         style={{
         position: "absolute",
@@ -416,36 +481,6 @@ const GoogleMaps = (
       }}
         >
         <MyLocationIcon style={{width:"3rem",height:"3rem"}}/>
-      </IconButton>
-
-
-      <IconButton
-        className="loginButton utilButton"
-        style={{
-          display: isPressed.isSignedin ? "none" : "block",
-        }}
-        onClick={() => {
-          isPressed.setShade(true);
-          isPressed.setSignin(true);
-          isPressed.setSignup(false);
-        }}
-      >
-        <LoginIcon className="loginIcon utilIcon"></LoginIcon>
-      </IconButton>
-
-      <IconButton
-        className="userButton utilButton"
-        style={{
-          display: isPressed.isSignedin ? "block" : "none",
-        }}
-        onClick={() => {
-          isPressed.setShade(true);
-          isPressed.setSignin(false);
-          isPressed.setSignup(false);
-          isPressed.setUserUtils(true);
-        }}
-      >
-        <PersonIcon className="userIcon utilIcon"></PersonIcon>
       </IconButton>
 
       <Fade
