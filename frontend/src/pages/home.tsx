@@ -361,7 +361,7 @@ const GoogleMaps = (
         borderRadius:'20%'
       }}
         >
-        <MyLocationIcon style={{width:"4rem",height:"4rem"}}/>
+        <MyLocationIcon style={{width:"3rem",height:"3rem"}}/>
       </IconButton>
 
 
