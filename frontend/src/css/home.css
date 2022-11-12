@@ -102,3 +102,10 @@
   top: 50%;
   z-index: 1002;
 }
+
+.userUtils{
+  position: absolute;
+  transform: translateX(-100%);
+  right: 0;
+
+}

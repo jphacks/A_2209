@@ -122,7 +122,7 @@ export const UserUtils = memo(() => {
 
   const isPressed: pressedType = useContext(Pressed);
 
-  if(isPressed.user !== null){
+  if(isPressed.user.uid){
     var displayName: string = isPressed.user.uid;
   }else{
     var displayName: string = '';

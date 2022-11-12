@@ -5,20 +5,33 @@ import Drawer from '@mui/material/Drawer';
 import Fade from '@mui/material/Fade';
 import Grow from '@mui/material/Grow';
 import Slide from '@mui/material/Slide';
-import { Button, IconButton, FormControlLabel } from '@mui/material';
+import Alert from '@mui/material/Alert'
+import {Button, IconButton, FormControlLabel} from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import CloseIcon from '@mui/icons-material/Close';
 import PersonIcon from '@mui/icons-material/Person';
+import MyLocationIcon from '@mui/icons-material/MyLocation';
 import AudioPlayer from "../utils/script_audioPlayer";
 import { CSSTransition } from 'react-transition-group';
 
-import { Signin } from '../components/signin'
-import { Signup } from '../components/signup'
+import { initializeApp } from "firebase/app";
+import { getFirestore, doc, collection, setDoc } from "firebase/firestore";
+
+import {Signin} from '../components/signin'
+import {Signup} from '../components/signup'
 import { UserUtils } from "../components/userUtils";
 // import { useShadePressed, useLoginPressed, useSignupPressed } from "../hooks/hooks";
 import { pressedType, Pressed } from '../contexts/contexts'
+import firebaseConfig from "../apis";
 
 import '../css/home.css'
+import { borderRadius } from "@mui/system";
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+// Initialize Cloud Firestore and get a reference to the service
+const db = getFirestore(app);
 
 const Home: React.FC = () => {
 
@@ -112,9 +125,9 @@ const GoogleMaps = (
   const [destiMarker, setDestiMarker] = useState<google.maps.Marker>(new google.maps.Marker(null))
   const [showModal, setShowModal] = useState<boolean>(false)
   //audioタグの状態管理　0:startしてない 1:一時停止中 2:再生中
-  const [isPlaying, setIsPlaying] = useState<Number>(0)
-  const [isAudioCreated, setIsAudioCreated] = useState<boolean>(false)
-  const apRef: any = useRef(null)
+  const[isPlaying,setIsPlaying] = useState<Number>(0)
+  const [isAudioCreated,setIsAudioCreated] = useState<boolean>(false)
+  const apRef = useRef<AudioPlayer>(null!)
 
 
 
@@ -155,25 +168,32 @@ const GoogleMaps = (
 
   }, []);
 
-  const stopAudio = () => {
-    const aud = document.getElementById("audio") as HTMLAudioElement;
-    aud.pause()
+  const stopAudio = ()=>{
+    apRef.current?.pause()
     setIsPlaying(1)
   }
 
-  const endAudio = () => {
-    const aud = document.getElementById("audio") as HTMLAudioElement;
-    aud.pause()
+  const endAudio = ()=>{
+    apRef.current?.pause()
     setIsPlaying(0)
   }
 
-  const startAudio = () => {
-    const aud = document.getElementById("audio") as HTMLAudioElement;
-    aud.play()
+  const startAudio = ()=>{
+    apRef.current?.play()
     setIsPlaying(2)
   }
 
-  const handleClick = () => {
+  const setMyplaceCenter = ()=>{
+    navigator.geolocation.getCurrentPosition((position:GeolocationPosition)=>{
+      const pos = new google.maps.LatLng({lat:position.coords.latitude,lng:position.coords.longitude})
+      googleMap?.setCenter(pos)
+      googleMap?.setZoom(18)
+    },(err:GeolocationPositionError)=>{
+      console.log(err.message)
+    })
+  }
+
+  const handleClick = ()=>{
     console.log("handleClick")
     if (!isAudioCreated) {
       apRef.current = new AudioPlayer();
@@ -253,6 +273,11 @@ const GoogleMaps = (
       const degrees = 360 - compassHeading(alpha, beta, gamma);
       apRef.curent.setHeading(degrees);
     }
+    const degrees = 360 - compassHeading(alpha, beta, gamma);
+    apRef.current.setHeading(degrees);
+    console.log(degrees);
+    setDeg(degrees);
+  }
 
 
     const options = {
@@ -261,7 +286,9 @@ const GoogleMaps = (
       maximumAge: 0
     };
 
-    apRef.current.setDestinationCoordinate(destiPosition.lat(), destiPosition.lng())
+    apRef.current.setDestinationCoordinate(destiPosition.lat(),destiPosition.lng())
+    console.log(destiPosition.lat())
+    console.log(destiPosition.lng())
     // ap.setAudioURL("music.ogg")
     const watch_position_id = navigator.geolocation.watchPosition(success, error, options);
     const OS = detectOSSimply();
@@ -287,6 +314,27 @@ const GoogleMaps = (
     return null;
   }
 
+  function sendSignal(mode: string, initialLat: number, initialLng: number, initialBrg: number, offset: number){
+    if(isPressed.user !== null){
+      const data = {
+        initialBearing: initialBrg,
+        initialLatitude: initialLat,
+        initialLongitude: initialLng,
+        mode: mode,
+        offset: offset,
+        playing: true,
+        routing: true
+      }
+
+      try {
+        const docRef = setDoc(doc(db, "users", isPressed.user.uid, "signal", "signal"), data);
+
+        console.log("Document written successfully");
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+    }
+  }
 
   useEffect(() => {
     destiMarker.setMap(null)
@@ -312,6 +360,9 @@ const GoogleMaps = (
   // const {loginPressed, loginPressedtoFalse, loginPressedtoTrue} = useLoginPressed();
   // const {signupPressed, signupPressedtoFalse, signupPressedtoTrue} = useSignupPressed();
   const isPressed: pressedType = useContext(Pressed);
+  const [alertTimer, setAlertTimer] = useState(false);
+
+  const [deg, setDeg] = useState(0);
 
   return (
 
@@ -357,6 +408,28 @@ const GoogleMaps = (
         isPlaying == 1 ? (
           <Button id="musicStopper" color='primary' variant="contained" style={{ position: "absolute", bottom: "10px", left: '10px', width: '100px', height: '100px' }} onClick={startAudio}>再生</Button>
         ) : null}
+
+      <Slide
+        mountOnEnter
+        unmountOnExit
+        in={isPressed.alert && isPressed.isSignedin && (isPressed.alertState == 'success')}
+        direction="down"
+      >
+        <Alert severity="success">Signed in successfully</Alert>
+      </Slide>
+      <IconButton 
+        onClick={setMyplaceCenter}
+        style={{
+        position: "absolute",
+        zIndex: "1000",
+        right: "5%",
+        bottom: "10%",
+        border:'solid 2px',
+        borderRadius:'20%'
+      }}
+        >
+        <MyLocationIcon style={{width:"3rem",height:"3rem"}}/>
+      </IconButton>
 
 
       <IconButton
