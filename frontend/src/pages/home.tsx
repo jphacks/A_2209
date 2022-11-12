@@ -14,6 +14,7 @@ import MyLocationIcon from '@mui/icons-material/MyLocation';
 import AudioPlayer from "../utils/script_audioPlayer";
 import { CSSTransition } from 'react-transition-group';
 
+import { getAuth, signInWithEmailAndPassword, getRedirectResult, signInWithRedirect, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, collection, setDoc } from "firebase/firestore";
 
@@ -23,15 +24,20 @@ import { UserUtils } from "../components/userUtils";
 // import { useShadePressed, useLoginPressed, useSignupPressed } from "../hooks/hooks";
 import { pressedType, Pressed } from '../contexts/contexts'
 import firebaseConfig from "../apis";
+import userInfoRegistration from '../components/userInfoRegistration';
+
 
 import '../css/home.css'
 import { borderRadius } from "@mui/system";
+
+const provider = new GoogleAuthProvider();
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 const Home:React.FC = () =>{
 
@@ -255,8 +261,6 @@ const GoogleMaps = (
     }
     const degrees = 360 - compassHeading(alpha, beta, gamma);
     apRef.current.setHeading(degrees);
-    console.log(degrees);
-    setDeg(degrees);
   }
 
 
@@ -307,7 +311,7 @@ const GoogleMaps = (
       }
 
       try {
-        const docRef = setDoc(doc(db, "users", isPressed.user.uid, "signal", "signal"), data);
+        setDoc(doc(db, "users", isPressed.user.uid, "signal", "signal"), data);
 
         console.log("Document written successfully");
       } catch (e) {
@@ -336,13 +340,48 @@ const GoogleMaps = (
     initGoogleMaps();
   },[]);
 
-  // const {shadePressed, shadePressedtoFalse, shadePressedtoTrue} = useShadePressed();
-  // const {loginPressed, loginPressedtoFalse, loginPressedtoTrue} = useLoginPressed();
-  // const {signupPressed, signupPressedtoFalse, signupPressedtoTrue} = useSignupPressed();
+  function redirect_home_signedin(user:any) {
+    isPressed.setShade(false);
+    isPressed.setSignin(false);
+    isPressed.setSignup(false);
+    isPressed.setIsSignedin(true);
+    isPressed.setUser(user);
+    isPressed.setAlert(true);
+    isPressed.setAlertState('successful');
+    // redirect("/");
+    setTimeout(() => {isPressed.setAlert(false);}, 5000)
+  };
+
+  useEffect(() => {
+    getRedirectResult(auth)
+    .then((result:any) => {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      const credential:any = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      // The signed-in user info.
+      const user = result.user;
+      // ...
+      redirect_home_signedin(user)
+      userInfoRegistration(user);
+      console.log(result)
+      isPressed.setCredential(result);
+    }).catch((error) => {
+      // Handle Errors here.
+      console.log(error)
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // The email of the user's account used.
+      const email = error.customData.email;
+      // The AuthCredential type that was used.
+      const credential = GoogleAuthProvider.credentialFromError(error);
+      // ...
+    });
+  });
+
   const isPressed: pressedType = useContext(Pressed);
   const [alertTimer, setAlertTimer] = useState(false);
 
-  const [deg, setDeg] = useState(0);
+  console.log(isPressed.credential)
 
   return (
 
@@ -397,7 +436,7 @@ const GoogleMaps = (
       >
         <Alert severity="success">Signed in successfully</Alert>
       </Slide>
-      <IconButton 
+      <IconButton
         onClick={setMyplaceCenter}
         style={{
         position: "absolute",

@@ -1,4 +1,4 @@
-import React, { memo, useState, useContext } from 'react';
+import React, { memo, useState, useContext, useEffect } from 'react';
 import {Box, Button, Card, CardActions, CardContent, CardHeader, TextField, IconButton} from "@mui/material";
 import GoogleIcon from '@mui/icons-material/Google';
 import CloseIcon from '@mui/icons-material/Close';
@@ -7,10 +7,11 @@ import { redirect } from "react-router-dom";
 // Import the functions you need from the SDKs you need
 // import firebase from "firebase"
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, getRedirectResult, signInWithRedirect, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
 
 import firebaseConfig from '../apis';
+import userInfoRegistration from './userInfoRegistration';
 // import firebaseConfig from '../firebaseConfig';
 import { getFirestore } from 'firebase/firestore/lite';
 
@@ -53,27 +54,8 @@ export const Signin = memo(() => {
     isPressed.setIsSignedin(false);
   };
 
-  function onGoogleButoonClick(){
-    signInWithPopup(auth, provider)
-    .then((result) => {
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      const credential:any = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
-      // The signed-in user info.
-      const user = result.user;
-      // ...
-      redirect_home_signedin(user)
-    }).catch((error) => {
-      // Handle Errors here.
-      console.log(error)
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // The email of the user's account used.
-      const email = error.customData.email;
-      // The AuthCredential type that was used.
-      const credential = GoogleAuthProvider.credentialFromError(error);
-      // ...
-    });
+  async function OnGoogleButoonClick(){
+    await signInWithRedirect(auth, provider);
   }
 
   const cardStyle = {
@@ -180,7 +162,7 @@ export const Signin = memo(() => {
                 <GoogleIcon></GoogleIcon>
               }
               style={{textTransform: 'capitalize'}}
-              onClick={onGoogleButoonClick}
+              onClick={OnGoogleButoonClick}
             >
             Sign in with Google
             </Button>

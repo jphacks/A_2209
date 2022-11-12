@@ -27,3 +27,4 @@ firebaseConfig.tsx
 googleMapAPI.json
 .firebaserc
 firebase.json
+.env

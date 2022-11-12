@@ -14,6 +14,7 @@ import firebaseConfig from '../apis';
 import { getFirestore, collection, getDocs, getDoc, addDoc, doc, setDoc } from 'firebase/firestore';
 
 import { pressedType, Pressed } from '../contexts/contexts';
+import userInfoRegistration from './userInfoRegistration';
 import '../css/signup.css'
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -43,7 +44,7 @@ export const Signup = memo(() => {
   const cardStyle = {
     display: "block",
     transitionDuration: "0.3s",
-    height: "550px",
+    height: "500px",
     width: "90vw",
     maxWidth: "450px",
     variant: "outlined",
@@ -62,21 +63,7 @@ export const Signup = memo(() => {
         const user = userCredential.user;
         console.log(user)
         // ...
-        try {
-          const attrRef = setDoc(doc(db, "users", username, "userdata", "attributes"), {
-            email: email,
-            username: username,
-            password: password
-          });
-          const friendsRef = setDoc(doc(db, "users", username, "friends", "friends"), {
-            blocked: [],
-            friends: [],
-            receivedRequests: [],
-            sentRequests: [],
-          });
-        } catch (e) {
-          console.error("Error adding document: ", e);
-        }
+        userInfoRegistration(user);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -87,7 +74,7 @@ export const Signup = memo(() => {
 
   };
 
-  const [username, setUsername] = useState("");
+  // const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -114,7 +101,7 @@ export const Signup = memo(() => {
               <CloseIcon></CloseIcon>
             </IconButton>
             <div>
-              <TextField
+              {/* <TextField
                 fullWidth
                 id="username"
                 type="username"
@@ -122,7 +109,7 @@ export const Signup = memo(() => {
                 placeholder="ユーザー名"
                 margin="normal"
                 onChange={(e) => setUsername(e.target.value)}
-              />
+              /> */}
               <TextField
                 fullWidth
                 id="email"
