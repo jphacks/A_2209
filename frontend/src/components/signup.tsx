@@ -57,6 +57,12 @@ export const Signup = memo(() => {
     //   return('error')
     // }
 
+    // if ('ReactNativeWebView' in window) {
+    //   window.ReactNativeWebView.postMessage(
+    //     JSON.stringify({ type: 'hoge', hoge: 'ほげ' }),
+    //   )
+    // }
+
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in

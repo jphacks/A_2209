@@ -455,14 +455,6 @@ const GoogleMaps = (
           <Button id="musicStopper" color='primary' variant="contained" style={{position:"absolute",bottom:"10px",left:'10px',width:'100px',height:'100px'}} onClick={startAudio}>再生</Button>
       ):null}
 
-      <Slide
-        mountOnEnter
-        unmountOnExit
-        in={isPressed.alert && isPressed.isSignedin && (isPressed.alertState == 'success')}
-        direction="down"
-      >
-        <Alert severity="success">Signed in successfully</Alert>
-      </Slide>
       <IconButton
         onClick={setMyplaceCenter}
         style={{
