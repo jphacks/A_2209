@@ -11,6 +11,7 @@ import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvide
 import { getAnalytics } from "firebase/analytics";
 
 import firebaseConfig from '../apis';
+// import firebaseConfig from '../firebaseConfig';
 import { getFirestore } from 'firebase/firestore/lite';
 
 // import { shadePressed, loginPressed, signupPressed } from '../hooks/hooks';
@@ -64,6 +65,7 @@ export const Signin = memo(() => {
       redirect_home_signedin(user)
     }).catch((error) => {
       // Handle Errors here.
+      console.log(error)
       const errorCode = error.code;
       const errorMessage = error.message;
       // The email of the user's account used.

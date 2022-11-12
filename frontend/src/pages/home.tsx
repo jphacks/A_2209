@@ -13,13 +13,23 @@ import PersonIcon from '@mui/icons-material/Person';
 import AudioPlayer from "../utils/script_audioPlayer";
 import { CSSTransition } from 'react-transition-group';
 
+import { initializeApp } from "firebase/app";
+import { getFirestore, doc, collection, setDoc } from "firebase/firestore";
+
 import {Signin} from '../components/signin'
 import {Signup} from '../components/signup'
 import { UserUtils } from "../components/userUtils";
 // import { useShadePressed, useLoginPressed, useSignupPressed } from "../hooks/hooks";
 import { pressedType, Pressed } from '../contexts/contexts'
+import firebaseConfig from "../apis";
 
 import '../css/home.css'
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+// Initialize Cloud Firestore and get a reference to the service
+const db = getFirestore(app);
 
 const Home:React.FC = () =>{
 
@@ -153,7 +163,8 @@ const GoogleMaps = (
 
   const startAudio = ()=>{
     const aud = document.getElementById("audio") as HTMLAudioElement;
-    aud.play()
+    aud.load();
+    aud.play();
     setIsPlaying(2)
   }
 
@@ -236,7 +247,10 @@ const GoogleMaps = (
     }
     const degrees = 360 - compassHeading(alpha, beta, gamma);
     apRef.curent.setHeading(degrees);
+    console.log(degrees);
+    setDeg(degrees);
   }
+
 
     const options = {
       enableHighAccuracy: true,
@@ -245,6 +259,8 @@ const GoogleMaps = (
     };
 
     apRef.current.setDestinationCoordinate(destiPosition.lat(),destiPosition.lng())
+    console.log(destiPosition.lat())
+    console.log(destiPosition.lng())
     // ap.setAudioURL("music.ogg")
     const watch_position_id = navigator.geolocation.watchPosition(success,error,options);
     const OS = detectOSSimply();
@@ -270,6 +286,27 @@ const GoogleMaps = (
     return null;
   }
 
+  function sendSignal(mode: string, initialLat: number, initialLng: number, initialBrg: number, offset: number){
+    if(isPressed.user !== null){
+      const data = {
+        initialBearing: initialBrg,
+        initialLatitude: initialLat,
+        initialLongitude: initialLng,
+        mode: mode,
+        offset: offset,
+        playing: true,
+        routing: true
+      }
+
+      try {
+        const docRef = setDoc(doc(db, "users", isPressed.user.uid, "signal", "signal"), data);
+
+        console.log("Document written successfully");
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+    }
+  }
 
   useEffect(()=>{
     destiMarker.setMap(null)
@@ -296,6 +333,8 @@ const GoogleMaps = (
   // const {signupPressed, signupPressedtoFalse, signupPressedtoTrue} = useSignupPressed();
   const isPressed: pressedType = useContext(Pressed);
   const [alertTimer, setAlertTimer] = useState(false);
+
+  const [deg, setDeg] = useState(0);
 
   return (
 
