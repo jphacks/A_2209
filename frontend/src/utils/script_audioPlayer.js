@@ -33,6 +33,7 @@ export default class AudioPlayer {
     }
     pause() {
         this.audioElement.pause();
+        this.audioElement.valume = 0.0
     }
     stop() {
         this.audioElement.pause();
