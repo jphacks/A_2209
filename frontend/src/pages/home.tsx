@@ -10,6 +10,7 @@ import {Button, IconButton, FormControlLabel} from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import CloseIcon from '@mui/icons-material/Close';
 import PersonIcon from '@mui/icons-material/Person';
+import MyLocationIcon from '@mui/icons-material/MyLocation';
 import AudioPlayer from "../utils/script_audioPlayer";
 import { CSSTransition } from 'react-transition-group';
 
@@ -24,6 +25,7 @@ import { pressedType, Pressed } from '../contexts/contexts'
 import firebaseConfig from "../apis";
 
 import '../css/home.css'
+import { borderRadius } from "@mui/system";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -108,7 +110,7 @@ const GoogleMaps = (
   //audioタグの状態管理　0:startしてない 1:一時停止中 2:再生中
   const[isPlaying,setIsPlaying] = useState<Number>(0)
   const [isAudioCreated,setIsAudioCreated] = useState<boolean>(false)
-  const apRef:any = useRef(null)
+  const apRef = useRef<AudioPlayer>(null!)
 
 
 
@@ -150,22 +152,28 @@ const GoogleMaps = (
   },[]);
 
   const stopAudio = ()=>{
-    const aud = document.getElementById("audio") as HTMLAudioElement;
-    aud.pause()
+    apRef.current?.pause()
     setIsPlaying(1)
   }
 
   const endAudio = ()=>{
-    const aud = document.getElementById("audio") as HTMLAudioElement;
-    aud.pause()
+    apRef.current?.pause()
     setIsPlaying(0)
   }
 
   const startAudio = ()=>{
-    const aud = document.getElementById("audio") as HTMLAudioElement;
-    aud.load();
-    aud.play();
+    apRef.current?.play()
     setIsPlaying(2)
+  }
+
+  const setMyplaceCenter = ()=>{
+    navigator.geolocation.getCurrentPosition((position:GeolocationPosition)=>{
+      const pos = new google.maps.LatLng({lat:position.coords.latitude,lng:position.coords.longitude})
+      googleMap?.setCenter(pos)
+      googleMap?.setZoom(18)
+    },(err:GeolocationPositionError)=>{
+      console.log(err.message)
+    })
   }
 
   const handleClick = ()=>{
@@ -246,7 +254,7 @@ const GoogleMaps = (
         return;
     }
     const degrees = 360 - compassHeading(alpha, beta, gamma);
-    apRef.curent.setHeading(degrees);
+    apRef.current.setHeading(degrees);
     console.log(degrees);
     setDeg(degrees);
   }
@@ -389,6 +397,20 @@ const GoogleMaps = (
       >
         <Alert severity="success">Signed in successfully</Alert>
       </Slide>
+      <IconButton 
+        onClick={setMyplaceCenter}
+        style={{
+        position: "absolute",
+        zIndex: "1000",
+        right: "5%",
+        bottom: "10%",
+        border:'solid 2px',
+        borderRadius:'20%'
+      }}
+        >
+        <MyLocationIcon style={{width:"4rem",height:"4rem"}}/>
+      </IconButton>
+
 
       <IconButton
         className="loginButton utilButton"
