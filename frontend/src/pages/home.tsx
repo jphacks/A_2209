@@ -9,6 +9,7 @@ import {Button, IconButton, FormControlLabel} from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import CloseIcon from '@mui/icons-material/Close';
 import PersonIcon from '@mui/icons-material/Person';
+import MyLocationIcon from '@mui/icons-material/MyLocation';
 import AudioPlayer from "../utils/script_audioPlayer";
 import { CSSTransition } from 'react-transition-group';
 
@@ -19,6 +20,7 @@ import { UserUtils } from "../components/userUtils";
 import { pressedType, Pressed } from '../contexts/contexts'
 
 import '../css/home.css'
+import { borderRadius } from "@mui/system";
 
 const Home:React.FC = () =>{
 
@@ -154,6 +156,14 @@ const GoogleMaps = (
     const aud = document.getElementById("audio") as HTMLAudioElement;
     aud.play()
     setIsPlaying(2)
+  }
+
+  const setMyplaceCenter = ()=>{
+    navigator.geolocation.getCurrentPosition((position:GeolocationPosition)=>{
+      const pos = new google.maps.LatLng({lat:position.coords.latitude,lng:position.coords.longitude})
+      googleMap?.setCenter(pos)
+      googleMap?.setZoom(18)
+    })
   }
 
   const handleClick = ()=>{
@@ -340,6 +350,20 @@ const GoogleMaps = (
         isPlaying==1?(
           <Button id="musicStopper" color='primary' variant="contained" style={{position:"absolute",bottom:"10px",left:'10px',width:'100px',height:'100px'}} onClick={startAudio}>再生</Button>
       ):null}
+
+      <IconButton 
+        onClick={setMyplaceCenter}
+        style={{
+        position: "absolute",
+        zIndex: "1000",
+        right: "5%",
+        bottom: "10%",
+        border:'solid 2px',
+        borderRadius:'20%'
+      }}
+        >
+        <MyLocationIcon style={{width:"4rem",height:"4rem"}}/>
+      </IconButton>
 
 
       <IconButton
