@@ -99,7 +99,7 @@ const GoogleMaps = (
   //audioタグの状態管理　0:startしてない 1:一時停止中 2:再生中
   const[isPlaying,setIsPlaying] = useState<Number>(0)
   const [isAudioCreated,setIsAudioCreated] = useState<boolean>(false)
-  const apRef:any = useRef(null)
+  const apRef = useRef<AudioPlayer>(null!)
 
 
 
@@ -141,20 +141,17 @@ const GoogleMaps = (
   },[]);
 
   const stopAudio = ()=>{
-    const aud = document.getElementById("audio") as HTMLAudioElement;
-    aud.pause()
+    apRef.current?.pause()
     setIsPlaying(1)
   }
 
   const endAudio = ()=>{
-    const aud = document.getElementById("audio") as HTMLAudioElement;
-    aud.pause()
+    apRef.current?.pause()
     setIsPlaying(0)
   }
 
   const startAudio = ()=>{
-    const aud = document.getElementById("audio") as HTMLAudioElement;
-    aud.play()
+    apRef.current?.play()
     setIsPlaying(2)
   }
 
@@ -163,6 +160,8 @@ const GoogleMaps = (
       const pos = new google.maps.LatLng({lat:position.coords.latitude,lng:position.coords.longitude})
       googleMap?.setCenter(pos)
       googleMap?.setZoom(18)
+    },(err:GeolocationPositionError)=>{
+      console.log(err.message)
     })
   }
 
@@ -244,7 +243,7 @@ const GoogleMaps = (
         return;
     }
     const degrees = 360 - compassHeading(alpha, beta, gamma);
-    apRef.curent.setHeading(degrees);
+    apRef.current.setHeading(degrees);
 }
 
 
