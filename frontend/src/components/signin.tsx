@@ -167,7 +167,7 @@ export const Signin = memo(() => {
             Sign in with Google
             </Button>
           </CardActions>
-          <p className="toSignup">アカウント登録をお持ちでない方</p>
+          <p className="toSignup">アカウント登録がお済でない方</p>
           <CardActions>
             <Button
               variant="contained"

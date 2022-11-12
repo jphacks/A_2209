@@ -10,3 +10,9 @@
   width: calc((400px - 240px) / 2 * 0.5);
   margin: 0 calc((400px - 240px) / 2 * 0.25) 5px calc((400px - 240px) / 2 * 0.25);
 }
+
+@media screen and (max-width: calc(450px / 0.9)) {
+  .toSignup::before, .toSignup::after{
+    display: none;
+  }
+}

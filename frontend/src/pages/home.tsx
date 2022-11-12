@@ -379,7 +379,6 @@ const GoogleMaps = (
   });
 
   const isPressed: pressedType = useContext(Pressed);
-  const [alertTimer, setAlertTimer] = useState(false);
 
   console.log(isPressed.credential)
 
@@ -416,6 +415,34 @@ const GoogleMaps = (
           marginTop:'4px',
           display:'inline'
         }}/>
+        <IconButton
+          className="loginButton utilButton"
+          style={{
+            display: isPressed.isSignedin ? "none" : "block",
+          }}
+          onClick={() => {
+            isPressed.setShade(true);
+            isPressed.setSignin(true);
+            isPressed.setSignup(false);
+          }}
+        >
+          <LoginIcon className="loginIcon utilIcon"></LoginIcon>
+        </IconButton>
+
+        <IconButton
+          className="userButton utilButton"
+          style={{
+            display: isPressed.isSignedin ? "block" : "none",
+          }}
+          onClick={() => {
+            isPressed.setShade(true);
+            isPressed.setSignin(false);
+            isPressed.setSignup(false);
+            isPressed.setUserUtils(true);
+          }}
+        >
+          <PersonIcon className="userIcon utilIcon"></PersonIcon>
+        </IconButton>
       </Box>
 
       <div id='map' style={{height:window.innerHeight}}/>
@@ -448,36 +475,6 @@ const GoogleMaps = (
       }}
         >
         <MyLocationIcon style={{width:"4rem",height:"4rem"}}/>
-      </IconButton>
-
-
-      <IconButton
-        className="loginButton utilButton"
-        style={{
-          display: isPressed.isSignedin ? "none" : "block",
-        }}
-        onClick={() => {
-          isPressed.setShade(true);
-          isPressed.setSignin(true);
-          isPressed.setSignup(false);
-        }}
-      >
-        <LoginIcon className="loginIcon utilIcon"></LoginIcon>
-      </IconButton>
-
-      <IconButton
-        className="userButton utilButton"
-        style={{
-          display: isPressed.isSignedin ? "block" : "none",
-        }}
-        onClick={() => {
-          isPressed.setShade(true);
-          isPressed.setSignin(false);
-          isPressed.setSignup(false);
-          isPressed.setUserUtils(true);
-        }}
-      >
-        <PersonIcon className="userIcon utilIcon"></PersonIcon>
       </IconButton>
 
       <Fade
