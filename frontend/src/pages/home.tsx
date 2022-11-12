@@ -199,11 +199,11 @@ const GoogleMaps = (
       apRef.current = new AudioPlayer();
       setIsAudioCreated(true)
     }
-
     function success(pos: any) {
       const curLoc = pos.coords;
       apRef.current.setCurrentCoordinate(curLoc.latitude, curLoc.longitude);
     }
+    
     function error(err: any) {
       console.warn('ERROR(' + err.code + '): ' + err.message);
     }
@@ -271,13 +271,11 @@ const GoogleMaps = (
         return;
       }
       const degrees = 360 - compassHeading(alpha, beta, gamma);
-      apRef.curent.setHeading(degrees);
+      apRef.current.setHeading(degrees);
+      console.log(degrees);
+      setDeg(degrees);
     }
-    const degrees = 360 - compassHeading(alpha, beta, gamma);
-    apRef.current.setHeading(degrees);
-    console.log(degrees);
-    setDeg(degrees);
-  }
+  
 
 
     const options = {
@@ -308,10 +306,7 @@ const GoogleMaps = (
     } else {
       alert("お使いの環境はこのプロダクトに対応していない可能性があります！");
     }
-
-    apRef.current.play();
-    setIsPlaying(2);
-    return null;
+    startAudio()
   }
 
   function sendSignal(mode: string, initialLat: number, initialLng: number, initialBrg: number, offset: number){
